@@ -36,8 +36,30 @@ export function comparisonsToJSON(list: Comparison[]): string {
     return Object.assign({}, ...list);
 }
 
-export function compareObjects<T>(obj: string, left?: T, right?: T, primary?: string): Comparison[];
-export function compareObjects<T extends GetKeyValue>(obj: string, left?: T[], right?: T[], primary?: string): Comparison[] {
+export function compareObjects(primaryObj: object, secondaryObj: object): string {
+    let cmp: Comparison[] = [];
+    const objectName: string = primaryObj.constructor.name;
+    function traverse(obj, obj2) {
+        if (typeof obj === 'object') {
+            for (const p in obj) {
+                if (obj.hasOwnProperty(p)) {
+                    if (obj[p] instanceof Array) {
+                        cmp = cmp.concat(createComparisons(objectName + '|' + p, obj[p], obj2[p], 'left'));
+                        traverse(obj[p], obj2[p]);
+                    } else if (isNaN(Number(p))) {
+                        cmp = cmp.concat(createComparisons(objectName + '|' + p, { [p]: obj[p] }, { [p]: obj2[p] }, 'left'));
+                    }
+                }
+            }
+            return obj;
+        }
+    }
+    traverse(primaryObj, secondaryObj);
+    return comparisonsToCSV(cmp);
+}
+
+export function createComparisons<T>(obj: string, left?: T, right?: T, primary?: string): Comparison[];
+export function createComparisons<T extends GetKeyValue>(obj: string, left?: T[], right?: T[], primary?: string): Comparison[] {
     const delta: Comparison[] = new Array();
     let path: string;
     let leftVal: string;
@@ -148,7 +170,7 @@ export function compareObjects<T extends GetKeyValue>(obj: string, left?: T[], r
  * @param  {} obj
  */
 export function normalizeObject(obj) {
-    if ( typeof obj === 'object') {
+    if (typeof obj === 'object') {
         for (const property in obj) {
             if (obj.hasOwnProperty(property)) {
                 if (obj[property] instanceof Array) {

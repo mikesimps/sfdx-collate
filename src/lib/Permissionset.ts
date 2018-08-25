@@ -208,10 +208,8 @@ export class PermissionSet implements GetKeyValue {
     public getKeyValue(): string {
         return String(this[this.getKey()]);
     }
-}
 
-// const example = '{"PermissionSet":{"$":{"xmlns":"http://soap.sforce.com/2006/04/metadata"},"fieldPermissions":[{"editable":"false","field":"DetailedReportItem__x.Client_Name__c","readable":"true"},{"editable":"false","field":"DetailedReportItem__x.Duration__c","readable":"true"},{"editable":"false","field":"DetailedReportItem__x.End_Time__c","readable":"true"},{"editable":"false","field":"DetailedReportItem__x.Project_Id__c","readable":"true"},{"editable":"false","field":"DetailedReportItem__x.Project_Name__c","readable":"true"},{"editable":"false","field":"DetailedReportItem__x.Start_Time__c","readable":"true"}],"hasActivationRequired":"false","label":"Toggl Users","objectPermissions":{"allowCreate":"false","allowDelete":"false","allowEdit":"false","allowRead":"true","modifyAllRecords":"false","object":"DetailedReportItem__x","viewAllRecords":"false"}}}';
-// const p: PermissionSet = Deserialize(JSON.parse(example).PermissionSet, PermissionSet);
-// console.log(p);
-// const s: JSON = Serialize(p);
-// console.log(s);
+    public getClass() {
+        return PermissionSet;
+    }
+}
