@@ -4,18 +4,15 @@ import { PermissionSet } from './Permissionset';
 
 export function xmlToJson(xml: string): JSON {
     const opts = { explicitArray: false };
-    const primaryParser = new xml2js.Parser(opts);
+    // const primaryParser = new xml2js.Parser(opts);
+    const primaryParser = new xml2js.Parser();
 
     let obj: JSON;
     primaryParser.parseString(xml, (_err, result) => {
         obj = result;
     });
-
+    console.log(obj);
     return obj;
-}
-
-export function getClass<T extends PermissionSet>(obj: T) {
-    return obj.getClass();
 }
 
 export function xmlToInstance(xml: string) {

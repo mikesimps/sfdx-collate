@@ -1,3 +1,5 @@
+import { deserialize, Deserialize, deserializeAs, serialize, Serialize, serializeAs } from 'cerialize';
+import { toObject } from 'csvjson';
 import { parse } from 'json2csv';
 
 export interface GetKeyValue {
@@ -6,12 +8,12 @@ export interface GetKeyValue {
 }
 
 export class Comparison {
-    public obj: string;
-    public key: string; //
-    public left: string; // Map<string, object>;
-    public right: string; // Map<string, object>;
-    public primary: string;
-    public change: string;
+    @serialize @deserialize public obj: string;
+    @serialize @deserialize public key: string; //
+    @serialize @deserialize public left: string; // Map<string, object>;
+    @serialize @deserialize public right: string; // Map<string, object>;
+    @serialize @deserialize public primary: string;
+    @serialize @deserialize public change: string;
     public leftObj: object;
     public rightObj: object;
 
@@ -27,13 +29,18 @@ export class Comparison {
     }
 }
 
+export function csvToComparisons(csv: string): Comparison[] {
+    return Deserialize(toObject(csv, {delimiter: ',', quote: '"'}), Comparison);
+}
+
 export function comparisonsToCSV(list: Comparison[]): string {
     // const fields = ['Object', 'Key', 'Left Value', 'Right Value', 'Primary', 'Change', 'Left Object', 'Right Object'];
-    return parse(list);
+    return parse(comparisonsToJSON(list));
 }
 
 export function comparisonsToJSON(list: Comparison[]): string {
-    return Object.assign({}, ...list);
+    // return Object.assign({}, ...list);
+    return Serialize(list);
 }
 
 export function compareObjects(primaryObj: object, secondaryObj: object): string {
@@ -72,36 +79,59 @@ export function createComparisons<T extends GetKeyValue>(obj: string, left?: T[]
     let lKey: string;
     let rKey: string;
     const objVal: string = obj.split('|')[0];
-    if (left instanceof Array && left.length + right.length > 0) {
+    if (left.length + right.length > 0) {
         let i = 0;
         previousLKey = ' ';
         do {
             let j = 0;
             if (left.length > 0) {
                 l = left[i];
-                keyProp = l.getKey();
-                lKey = l.getKeyValue();
+                if ((Object.keys(left).length > 1 || Object.keys(l).length > 1) && typeof l !== 'string') {
+                    keyProp = l.getKey();
+                    lKey = l.getKeyValue();
+                } else {
+                    keyProp = obj.split('|')[1];
+                    lKey = l;
+                }
             } else {
                 lKey = '~';
             }
             let matched = false;
             do {
-                if (right.length > 0) {
+                if (right.length > 0 ) {
                     r = right[j];
-                    keyProp = r.getKey();
-                    rKey = r.getKeyValue();
+                    if ((Object.keys(right).length > 1 || Object.keys(r).length > 1) && typeof r !== 'string') {
+                        keyProp = r.getKey();
+                        rKey = r.getKeyValue();
+                    } else {
+                        keyProp = obj.split('|')[1];
+                        rKey = String(r);
+                    }
                 } else {
                     rKey = '~';
                 }
-                // If Left unique identifier matches with Right
-                if (lKey === rKey) {
+                // If left or right are primative types
+                if ((Object(l) !== l && l !== undefined) || Object(r) !== r) {
+                    leftVal = String(l);
+                    rightVal = String(r);
+                    path = obj;
+                    // If the property value matches
+                    if (l === r) {
+                        change = 'Match';
+                    } else if (!leftVal || !rightVal) {
+                        change = 'Add';
+                    } else {
+                        change = 'Update';
+                    }
+                    delta.push(new Comparison(objVal, path, leftVal, rightVal, primary, change, l, r));
+                } else if (lKey === rKey) {
                     matched = true;
                     // Loop through each of the objects properties
                     for (const key in l) {
                         if (l.hasOwnProperty(key)) {
                             leftVal = String(l[key]);
                             rightVal = String(r[key]);
-                            path = obj + '|' + l[keyProp] + '|' + key;
+                            path = obj + '|^' + l[keyProp] + '^|' + key;
                             // If the property value matches
                             if (l[key] === r[key]) {
                                 change = 'Match';
@@ -120,7 +150,7 @@ export function createComparisons<T extends GetKeyValue>(obj: string, left?: T[]
                         for (const key in l) {
                             if (l.hasOwnProperty(key)) {
                                 leftVal = String(l[key]);
-                                path = obj + '|' + l[keyProp] + '|' + key;
+                                path = obj + '|^' + l[keyProp] + '^|' + key;
                                 delta.push(new Comparison(objVal, path, leftVal, '', primary, change, l, {}));
                             }
                         }
@@ -129,7 +159,7 @@ export function createComparisons<T extends GetKeyValue>(obj: string, left?: T[]
                             for (const key in l) {
                                 if (r.hasOwnProperty(key)) {
                                     rightVal = String(r[key]);
-                                    path = obj + '|' + r[keyProp] + '|' + key;
+                                    path = obj + '|^' + r[keyProp] + '^|' + key;
                                     delta.push(new Comparison(objVal, path, '', rightVal, primary, change, {}, r));
                                 }
                             }
@@ -139,7 +169,7 @@ export function createComparisons<T extends GetKeyValue>(obj: string, left?: T[]
                         for (const key in r) {
                             if (r.hasOwnProperty(key)) {
                                 rightVal = String(r[key]);
-                                path = obj + '|' + r[keyProp] + '|' + key;
+                                path = obj + '|^' + r[keyProp] + '^|' + key;
                                 delta.push(new Comparison(objVal, path, '', rightVal, primary, change, {}, r));
                             }
                         }
@@ -152,14 +182,17 @@ export function createComparisons<T extends GetKeyValue>(obj: string, left?: T[]
         } while (i < left.length);
         left = [];
         right = [];
-    } else if (!(left instanceof Array)) {
-        if (JSON.stringify(left) === JSON.stringify(right)) {
-            change = 'Match';
-        } else if (left && right) {
-            change = 'Update';
+    } else if (left.length + right.length > 0) {
+        change = 'Update';
+        if (left.length >= right.length) {
+            leftVal = String(Object['values'](left[0])[0]);
         }
-        leftVal = String(Object['values'](left)[0]);
-        rightVal = String(Object['values'](right)[0]);
+        if (left.length <= right.length) {
+            rightVal = String(Object['values'](right)[0]);
+        }
+        if (left.length === right.length && JSON.stringify(left) === JSON.stringify(right)) {
+            change = 'Match';
+        }
         delta.push(new Comparison(objVal, obj, leftVal, rightVal, primary, change, left, right));
     }
     return delta;
@@ -187,7 +220,7 @@ function sortByKey<T extends GetKeyValue>(objs: T[]): T[] {
     return (objs.length > 1) ? objs.sort(sortByProperty(objs[0].getKey())) : objs;
 }
 
-function sortByProperty(property) {
+export function sortByProperty(property) {
     return (x, y) => {
         return ((x[property] === y[property]) ? 0 : ((x[property] > y[property]) ? 1 : -1));
     };

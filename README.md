@@ -30,16 +30,16 @@ USAGE
 ```
 <!-- usagestop -->
 <!-- commands -->
-* [`sfdx-collate collate:compare:create [FILE]`](#sfdx-collate-collatecomparecreate-file)
+* [`sfdx-collate collate:compare:build [FILE]`](#sfdx-collate-collatecomparebuild-file)
 * [`sfdx-collate collate:compare:files [FILE]`](#sfdx-collate-collatecomparefiles-file)
 
-## `sfdx-collate collate:compare:create [FILE]`
+## `sfdx-collate collate:compare:build [FILE]`
 
 Compares two metadatafiles
 
 ```
 USAGE
-  $ sfdx-collate collate:compare:create [FILE]
+  $ sfdx-collate collate:compare:build [FILE]
 
 OPTIONS
   -f, --file=file                                 (required) Path to primary file
@@ -47,10 +47,10 @@ OPTIONS
   --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
 
 EXAMPLE
-  $ sfdx collate:compare:files --primary directory/file1.xml --secondary directory/file2.xml
+  $ sfdx collate:compare:build --file directory/comparison.csv
 ```
 
-_See code: [src/commands/collate/compare/create.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.1.0/src/commands/collate/compare/create.ts)_
+_See code: [src/commands/collate/compare/build.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.1.0/src/commands/collate/compare/build.ts)_
 
 ## `sfdx-collate collate:compare:files [FILE]`
 

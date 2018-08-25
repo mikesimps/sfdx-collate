@@ -1,7 +1,8 @@
 import { core, flags, SfdxCommand } from '@salesforce/command';
 import * as fs from 'fs';
+import { inspect } from 'util';
 import { compareObjects } from '../../../lib/Comparison';
-import { xmlToInstance } from '../../../lib/Utils';
+import { xmlToInstance, xmlToJson } from '../../../lib/Utils';
 
 // Initialize Messages with the current plugin directory
 core.Messages.importMessagesDirectory(__dirname);
@@ -40,7 +41,7 @@ export default class Files extends SfdxCommand {
 
         const primaryXML: string = fs.readFileSync(this.flags.primary, 'utf8');
         const secondaryXML: string = fs.readFileSync(this.flags.secondary, 'utf8');
-
+        // console.log(inspect(xmlToJson(primaryXML),{depth: null}));
         console.log(compareObjects(xmlToInstance(primaryXML), xmlToInstance(secondaryXML)));
 
         return null;

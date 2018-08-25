@@ -1,9 +1,10 @@
 import {core, flags, SfdxCommand} from '@salesforce/command';
-import { Deserialize } from 'cerialize';
+import { Deserialize, Serialize } from 'cerialize';
 import * as fs from 'fs';
 import * as xml2js from 'xml2js';
-import { compareObjects, Comparison, comparisonsToCSV } from '../../../lib/Comparison';
+import { compareObjects, Comparison, comparisonsToCSV, csvToComparisons, sortByProperty } from '../../../lib/Comparison';
 import { PermissionSet } from '../../../lib/Permissionset';
+import { xmlToInstance } from '../../../lib/Utils';
 
 // Initialize Messages with the current plugin directory
 core.Messages.importMessagesDirectory(__dirname);
@@ -39,7 +40,40 @@ export default class Files extends SfdxCommand {
 
   // public async run(): Promise<core.AnyJson> {
   public run() {
-    const primaryFilePath = this.flags.file;
+
+    const compFile: string = fs.readFileSync(this.flags.file, 'utf8');
+
+    const cmp: Comparison[] = csvToComparisons(compFile).sort(sortByProperty('key'));
+
+    const obj: object = {};
+    let i = 0;
+    do {
+      const props: string[] = cmp[i].key.split('|');
+      let j: number = 1; // first property is always the Object
+      const property: string = props[j];
+      do {
+
+        if (property.startsWith('^') && property.endsWith('^')) {
+          // this is part of an array/nested object with this as the value
+          Object.keys(cmp[i]).find(key => cmp[i][key] === property); // go get the key based off the value
+        } else if ( j === props.length - 1 ) {
+
+        }
+
+        j++;
+      } while ( j < props.length );
+
+      i++;
+    } while ( i < cmp.length);
+
+    // const obj = Serialize(xmlToInstance(compFile));
+    // const str = 'PermissionSet';
+    // const builder = new xml2js.Builder();
+    // const obj2 = {};
+    // obj2[str] = obj;
+    // const xml = builder.buildObject(obj2);
+
+    // console.log(xml);
 
     return null;
   }

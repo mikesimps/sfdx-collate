@@ -1,4 +1,4 @@
-import { deserialize, deserializeAs, serialize, serializeAs } from 'cerialize';
+import { deserialize, deserializeAs, serialize, Serialize, serializeAs } from 'cerialize';
 import { GetKeyValue } from './Comparison';
 
 export class ApplicationVisibilities implements GetKeyValue {
@@ -194,6 +194,22 @@ export class PermissionSet implements GetKeyValue {
     @serializeAs(TabSettings) @deserializeAs(TabSettings) public tabSettings?: TabSettings[] = [];
     @serializeAs(UserPermissions) @deserializeAs(UserPermissions) public userPermissions?: UserPermissions[] = [];
 
+    // @deserializeAs(ApplicationVisibilities) public applicationVisibilities?: ApplicationVisibilities[] = [];
+    // public $: string;
+    // @deserializeAs(ClassAccesses) public classAccesses?: ClassAccesses[] = [];
+    // @deserializeAs(CustomPermissions) public customPermissions?: CustomPermissions[] = [];
+    // @deserialize public description?: string;
+    // @deserializeAs(ExternalDataSourceAccesses) public externalDataSourceAccesses?: ExternalDataSourceAccesses[] = [];
+    // @serializeAs(FieldPermissions, 'fieldPermissions') @deserializeAs(FieldPermissions, 'fieldPermissions') public fieldPermissions?: FieldPermissions[] = [];
+    // @deserialize public hasActivationRequired?: boolean;
+    // @serialize @deserialize public label: string;
+    // @deserialize public license?: string;
+    // @deserializeAs(ObjectPermissions) public objectPermissions?: ObjectPermissions[] = [];
+    // @deserializeAs(PageAccesses) public pageAccesses?: PageAccesses[] = [];
+    // @deserializeAs(RecordTypeVisibilities) public recordTypeVisibilities?: RecordTypeVisibilities[] = [];
+    // @deserializeAs(TabSettings) public tabSettings?: TabSettings[] = [];
+    // @deserializeAs(UserPermissions) public userPermissions?: UserPermissions[] = [];
+
     constructor(label?: string, description?: string, applicationVisibilities?: ApplicationVisibilities[], userPermissions?: UserPermissions[]) {
         this.label = label;
         this.applicationVisibilities = applicationVisibilities;
@@ -207,9 +223,5 @@ export class PermissionSet implements GetKeyValue {
 
     public getKeyValue(): string {
         return String(this[this.getKey()]);
-    }
-
-    public getClass() {
-        return PermissionSet;
     }
 }
