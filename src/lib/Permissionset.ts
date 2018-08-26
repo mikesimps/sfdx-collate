@@ -1,7 +1,7 @@
 import { deserialize, deserializeAs, serialize, Serialize, serializeAs } from 'cerialize';
-import { GetKeyValue } from './Comparison';
+import { GetKeys } from './Comparison';
 
-export class ApplicationVisibilities implements GetKeyValue {
+export class ApplicationVisibilities implements GetKeys {
     @serialize @deserialize public application: string; // key
     @serialize @deserialize public visible: boolean;
 
@@ -10,64 +10,59 @@ export class ApplicationVisibilities implements GetKeyValue {
         this.visible = visible;
     }
 
+    // public getKey = (): string => 'application';
+    // public getKeyValue = (): string => String(this[this.getKey()]);
+
     public getKey(): string { return 'application'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-class ClassAccesses implements GetKeyValue {
+class ClassAccesses {
     @serialize @deserialize public apexClass: string;
     @serialize @deserialize public enabled: boolean;
 
-    public getKey(): string {
-        return 'apexClass';
-    }
+    // public getKey = (): string => 'apexClass';
+    // public getKeyValue = (): string => String(this[this.getKey()]);
 
-    public getKeyValue(): string {
-        return String(this[this.getKey()]);
-    }
+    public getKey(): string { return 'apexClass'; }
+    public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-class CustomPermissions {
+class CustomPermissions implements GetKeys {
     @serialize @deserialize public enabled: boolean;
     @serialize @deserialize public name: string;
 
-    public getKey(): string {
-        return 'name';
-    }
+    // public getKey = (): string => 'name';
+    // public getKeyValue = (): string => String(this[this.getKey()]);
 
-    public getKeyValue(): string {
-        return String(this[this.getKey()]);
-    }
+    public getKey(): string { return 'name'; }
+    public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-class ExternalDataSourceAccesses implements GetKeyValue {
+class ExternalDataSourceAccesses implements GetKeys {
     @serialize @deserialize public enabled: boolean;
     @serialize @deserialize public externalDataSource: string;
 
-    public getKey(): string {
-        return 'externalDataSource';
-    }
+    // public getKey = (): string => 'externalDataSource';
+    // public getKeyValue = (): string => String(this[this.getKey()]);
 
-    public getKeyValue(): string {
-        return String(this[this.getKey()]);
-    }
+    public getKey(): string { return 'externalDataSource'; }
+    public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-class FieldPermissions implements GetKeyValue {
+class FieldPermissions implements GetKeys {
     @serialize @deserialize public editable: boolean;
     @serialize @deserialize public field: string;
     @serialize @deserialize public readable: boolean;
 
-    public getKey(): string {
-        return 'field';
-    }
+    // public getKey = (): string => 'field';
+    // public getKeyValue = (): string => String(this[this.getKey()]);
 
-    public getKeyValue(): string {
-        return String(this[this.getKey()]);
-    }
+    public getKey(): string { return 'field'; }
+    public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-class ObjectPermissions implements GetKeyValue {
+class ObjectPermissions implements GetKeys {
     @serialize @deserialize public object?: string; // key
     @serialize @deserialize public allowCreate?: boolean;
     @serialize @deserialize public allowDelete?: boolean;
@@ -86,52 +81,35 @@ class ObjectPermissions implements GetKeyValue {
         this.viewAllRecords = viewAllRecords;
     }
 
-    public getKey(): string {
-        return 'object';
-    }
+    // public getKey = (): string => 'object';
+    // public getKeyValue = (): string => String(this[this.getKey()]);
 
-    public getKeyValue(): string {
-        return String(this[this.getKey()]);
-    }
+    public getKey(): string { return 'object'; }
+    public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-class PageAccesses implements GetKeyValue {
+class PageAccesses implements GetKeys {
     @serialize @deserialize public apexPage: string;
     @serialize @deserialize public enabled: boolean;
 
-    public getKey(): string {
-        return 'apexPage';
-    }
-
-    public getKeyValue(): string {
-        return String(this[this.getKey()]);
-    }
+    public getKey(): string { return 'apexPage'; }
+    public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-class RecordTypeVisibilities implements GetKeyValue {
+class RecordTypeVisibilities implements GetKeys {
     @serialize @deserialize public recordType: string;
     @serialize @deserialize public visible: boolean;
 
-    public getKey(): string {
-        return 'recordType';
-    }
-
-    public getKeyValue(): string {
-        return String(this[this.getKey()]);
-    }
+    public getKey(): string { return 'recordType'; }
+    public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-class TabSettings implements GetKeyValue {
+class TabSettings implements GetKeys {
     @serialize @deserialize public tab: string;
     @serialize @deserialize public visibility: TabVisibility;
 
-    public getKey(): string {
-        return 'tab';
-    }
-
-    public getKeyValue(): string {
-        return String(this[this.getKey()]);
-    }
+    public getKey(): string { return 'tab'; }
+    public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
 export const tabVisibility = {
@@ -142,7 +120,7 @@ export const tabVisibility = {
 
 type TabVisibility = keyof typeof tabVisibility;
 
-export class UserPermissions implements GetKeyValue {
+export class UserPermissions implements GetKeys {
     @serialize @deserialize public enabled: boolean;
     @serialize @deserialize public name: string;
 
@@ -151,16 +129,39 @@ export class UserPermissions implements GetKeyValue {
         this.name = name;
     }
 
-    public getKey(): string {
-        return 'name';
-    }
-
-    public getKeyValue(): string {
-        return String(this[this.getKey()]);
-    }
+    public getKey(): string { return 'name'; }
+    public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-/*
+export class PermissionSet implements GetKeys {
+    @serializeAs(ApplicationVisibilities) @deserializeAs(ApplicationVisibilities) public applicationVisibilities?: ApplicationVisibilities[] = [];
+    @serialize @deserialize public $: string;
+    @serializeAs(ClassAccesses) @deserializeAs(ClassAccesses) public classAccesses?: ClassAccesses[] = [];
+    @serializeAs(CustomPermissions) @deserializeAs(CustomPermissions) public customPermissions?: CustomPermissions[] = [];
+    @serialize @deserialize public description?: string;
+    @serializeAs(ExternalDataSourceAccesses) @deserializeAs(ExternalDataSourceAccesses) public externalDataSourceAccesses?: ExternalDataSourceAccesses[] = [];
+    @serializeAs(FieldPermissions, 'fieldPermissions') @deserializeAs(FieldPermissions, 'fieldPermissions') public fieldPermissions?: FieldPermissions[] = [];
+    @serialize @deserialize public hasActivationRequired?: boolean;
+    @serialize @deserialize public label: string;
+    @serialize @deserialize public license?: string;
+    @serializeAs(ObjectPermissions) @deserializeAs(ObjectPermissions) public objectPermissions?: ObjectPermissions[] = [];
+    @serializeAs(PageAccesses) @deserializeAs(PageAccesses) public pageAccesses?: PageAccesses[] = [];
+    @serializeAs(RecordTypeVisibilities) @deserializeAs(RecordTypeVisibilities) public recordTypeVisibilities?: RecordTypeVisibilities[] = [];
+    @serializeAs(TabSettings) @deserializeAs(TabSettings) public tabSettings?: TabSettings[] = [];
+    @serializeAs(UserPermissions) @deserializeAs(UserPermissions) public userPermissions?: UserPermissions[] = [];
+
+    constructor(label?: string, description?: string, applicationVisibilities?: ApplicationVisibilities[], userPermissions?: UserPermissions[]) {
+        this.label = label;
+        this.applicationVisibilities = applicationVisibilities;
+        this.userPermissions = userPermissions;
+        this.description = description;
+    }
+
+    public getKey(): string { return 'label'; }
+    public getKeyValue(): string { return String(this[this.getKey()]); }
+}
+
+/* From Salesforce XSD for Reference
 <xsd:element name="applicationVisibilities" minOccurs="0" maxOccurs="unbounded" type="tns:PermissionSetApplicationVisibility"/>
 <xsd:element name="classAccesses" minOccurs="0" maxOccurs="unbounded" type="tns:PermissionSetApexClassAccess"/>
 <xsd:element name="customPermissions" minOccurs="0" maxOccurs="unbounded" type="tns:PermissionSetCustomPermissions"/>
@@ -176,52 +177,3 @@ export class UserPermissions implements GetKeyValue {
 <xsd:element name="tabSettings" minOccurs="0" maxOccurs="unbounded" type="tns:PermissionSetTabSetting"/>
 <xsd:element name="userPermissions" minOccurs="0" maxOccurs="unbounded" type="tns:PermissionSetUserPermission"/>
 */
-
-export class PermissionSet implements GetKeyValue {
-    @serializeAs(ApplicationVisibilities) @deserializeAs(ApplicationVisibilities) public applicationVisibilities?: ApplicationVisibilities[] = [];
-    @serialize @deserialize public $: string;
-    @serializeAs(ClassAccesses) @deserializeAs(ClassAccesses) public classAccesses?: ClassAccesses[] = [];
-    @serializeAs(CustomPermissions) @deserializeAs(CustomPermissions) public customPermissions?: CustomPermissions[] = [];
-    @serialize @deserialize public description?: string;
-    @serializeAs(ExternalDataSourceAccesses) @deserializeAs(ExternalDataSourceAccesses) public externalDataSourceAccesses?: ExternalDataSourceAccesses[] = [];
-    @serializeAs(FieldPermissions) @deserializeAs(FieldPermissions, 'fieldPermissions') public fieldPermissions?: FieldPermissions[] = [];
-    @serialize @deserialize public hasActivationRequired?: boolean;
-    @serialize @deserialize public label: string;
-    @serialize @deserialize public license?: string;
-    @serializeAs(ObjectPermissions) @deserializeAs(ObjectPermissions) public objectPermissions?: ObjectPermissions[] = [];
-    @serializeAs(PageAccesses) @deserializeAs(PageAccesses) public pageAccesses?: PageAccesses[] = [];
-    @serializeAs(RecordTypeVisibilities) @deserializeAs(RecordTypeVisibilities) public recordTypeVisibilities?: RecordTypeVisibilities[] = [];
-    @serializeAs(TabSettings) @deserializeAs(TabSettings) public tabSettings?: TabSettings[] = [];
-    @serializeAs(UserPermissions) @deserializeAs(UserPermissions) public userPermissions?: UserPermissions[] = [];
-
-    // @deserializeAs(ApplicationVisibilities) public applicationVisibilities?: ApplicationVisibilities[] = [];
-    // public $: string;
-    // @deserializeAs(ClassAccesses) public classAccesses?: ClassAccesses[] = [];
-    // @deserializeAs(CustomPermissions) public customPermissions?: CustomPermissions[] = [];
-    // @deserialize public description?: string;
-    // @deserializeAs(ExternalDataSourceAccesses) public externalDataSourceAccesses?: ExternalDataSourceAccesses[] = [];
-    // @serializeAs(FieldPermissions, 'fieldPermissions') @deserializeAs(FieldPermissions, 'fieldPermissions') public fieldPermissions?: FieldPermissions[] = [];
-    // @deserialize public hasActivationRequired?: boolean;
-    // @serialize @deserialize public label: string;
-    // @deserialize public license?: string;
-    // @deserializeAs(ObjectPermissions) public objectPermissions?: ObjectPermissions[] = [];
-    // @deserializeAs(PageAccesses) public pageAccesses?: PageAccesses[] = [];
-    // @deserializeAs(RecordTypeVisibilities) public recordTypeVisibilities?: RecordTypeVisibilities[] = [];
-    // @deserializeAs(TabSettings) public tabSettings?: TabSettings[] = [];
-    // @deserializeAs(UserPermissions) public userPermissions?: UserPermissions[] = [];
-
-    constructor(label?: string, description?: string, applicationVisibilities?: ApplicationVisibilities[], userPermissions?: UserPermissions[]) {
-        this.label = label;
-        this.applicationVisibilities = applicationVisibilities;
-        this.userPermissions = userPermissions;
-        this.description = description;
-    }
-
-    public getKey(): string {
-        return 'label';
-    }
-
-    public getKeyValue(): string {
-        return String(this[this.getKey()]);
-    }
-}

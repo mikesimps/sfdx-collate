@@ -1,5 +1,0 @@
-{
-  "commandDescription": "Compares two metadatafiles",
-  "fileFlagDescription": "Path to primary file",
-  "secondaryFlagDescription": "Path to secondary file"
-}

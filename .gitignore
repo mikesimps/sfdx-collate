@@ -8,3 +8,5 @@
 node_modules
 .vscode
 .DS_Store
+/npm-shrinkwrap.json
+/oclif.manifest.json

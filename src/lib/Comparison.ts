@@ -1,18 +1,18 @@
-import { deserialize, Deserialize, deserializeAs, serialize, Serialize, serializeAs } from 'cerialize';
-import { toObject } from 'csvjson';
-import { parse } from 'json2csv';
+import { deserialize, Deserialize, serialize, Serialize } from 'cerialize';
+import { toCSV, toObject } from 'csvjson';
 
-export interface GetKeyValue {
+export interface GetKeys {
     getKey(): string;
     getKeyValue(): string;
 }
 
 export class Comparison {
     @serialize @deserialize public obj: string;
-    @serialize @deserialize public key: string; //
-    @serialize @deserialize public left: string; // Map<string, object>;
-    @serialize @deserialize public right: string; // Map<string, object>;
+    @serialize @deserialize public key: string;
+    @serialize @deserialize public left: string;
+    @serialize @deserialize public right: string;
     @serialize @deserialize public primary: string;
+    // @serialize @deserialize public final: string;
     @serialize @deserialize public change: string;
     public leftObj: object;
     public rightObj: object;
@@ -24,6 +24,7 @@ export class Comparison {
         this.right = right;
         this.primary = primary;
         this.change = change;
+        // this.final = final;
         this.leftObj = leftObj;
         this.rightObj = rightObj;
     }
@@ -34,12 +35,10 @@ export function csvToComparisons(csv: string): Comparison[] {
 }
 
 export function comparisonsToCSV(list: Comparison[]): string {
-    // const fields = ['Object', 'Key', 'Left Value', 'Right Value', 'Primary', 'Change', 'Left Object', 'Right Object'];
-    return parse(comparisonsToJSON(list));
+    return toCSV(comparisonsToJSON(list), {headers: 'relative', wrap: true});
 }
 
 export function comparisonsToJSON(list: Comparison[]): string {
-    // return Object.assign({}, ...list);
     return Serialize(list);
 }
 
@@ -66,7 +65,7 @@ export function compareObjects(primaryObj: object, secondaryObj: object): string
 }
 
 export function createComparisons<T>(obj: string, left?: T, right?: T, primary?: string): Comparison[];
-export function createComparisons<T extends GetKeyValue>(obj: string, left?: T[], right?: T[], primary?: string): Comparison[] {
+export function createComparisons<T extends GetKeys>(obj: string, left?: T[], right?: T[], primary?: string): Comparison[] {
     const delta: Comparison[] = new Array();
     let path: string;
     let leftVal: string;
@@ -91,7 +90,7 @@ export function createComparisons<T extends GetKeyValue>(obj: string, left?: T[]
                     lKey = l.getKeyValue();
                 } else {
                     keyProp = obj.split('|')[1];
-                    lKey = l;
+                    lKey = String(l);
                 }
             } else {
                 lKey = '~';
@@ -115,7 +114,6 @@ export function createComparisons<T extends GetKeyValue>(obj: string, left?: T[]
                     leftVal = String(l);
                     rightVal = String(r);
                     path = obj;
-                    // If the property value matches
                     if (l === r) {
                         change = 'Match';
                     } else if (!leftVal || !rightVal) {
@@ -131,8 +129,7 @@ export function createComparisons<T extends GetKeyValue>(obj: string, left?: T[]
                         if (l.hasOwnProperty(key)) {
                             leftVal = String(l[key]);
                             rightVal = String(r[key]);
-                            path = obj + '|^' + l[keyProp] + '^|' + key;
-                            // If the property value matches
+                            path = obj + '|^' + keyProp + ':' + l[keyProp] + '^|' + key;
                             if (l[key] === r[key]) {
                                 change = 'Match';
                             } else if (!leftVal || !rightVal) {
@@ -150,7 +147,7 @@ export function createComparisons<T extends GetKeyValue>(obj: string, left?: T[]
                         for (const key in l) {
                             if (l.hasOwnProperty(key)) {
                                 leftVal = String(l[key]);
-                                path = obj + '|^' + l[keyProp] + '^|' + key;
+                                path = obj + '|^' + keyProp + ':' + l[keyProp] + '^|' + key;
                                 delta.push(new Comparison(objVal, path, leftVal, '', primary, change, l, {}));
                             }
                         }
@@ -159,7 +156,7 @@ export function createComparisons<T extends GetKeyValue>(obj: string, left?: T[]
                             for (const key in l) {
                                 if (r.hasOwnProperty(key)) {
                                     rightVal = String(r[key]);
-                                    path = obj + '|^' + r[keyProp] + '^|' + key;
+                                    path = obj + '|^' + keyProp + ':' + r[keyProp] + '^|' + key;
                                     delta.push(new Comparison(objVal, path, '', rightVal, primary, change, {}, r));
                                 }
                             }
@@ -169,7 +166,7 @@ export function createComparisons<T extends GetKeyValue>(obj: string, left?: T[]
                         for (const key in r) {
                             if (r.hasOwnProperty(key)) {
                                 rightVal = String(r[key]);
-                                path = obj + '|^' + r[keyProp] + '^|' + key;
+                                path = obj + '|^' + keyProp + ':' + r[keyProp] + '^|' + key;
                                 delta.push(new Comparison(objVal, path, '', rightVal, primary, change, {}, r));
                             }
                         }
@@ -196,32 +193,4 @@ export function createComparisons<T extends GetKeyValue>(obj: string, left?: T[]
         delta.push(new Comparison(objVal, obj, leftVal, rightVal, primary, change, left, right));
     }
     return delta;
-}
-
-/**
- * Recursively sorts all entities and arrays for easier comparison
- * @param  {} obj
- */
-export function normalizeObject(obj) {
-    if (typeof obj === 'object') {
-        for (const property in obj) {
-            if (obj.hasOwnProperty(property)) {
-                if (obj[property] instanceof Array) {
-                    obj[property] = sortByKey(obj[property]);
-                }
-                normalizeObject(obj[property]);
-            }
-        }
-        return obj;
-    }
-}
-
-function sortByKey<T extends GetKeyValue>(objs: T[]): T[] {
-    return (objs.length > 1) ? objs.sort(sortByProperty(objs[0].getKey())) : objs;
-}
-
-export function sortByProperty(property) {
-    return (x, y) => {
-        return ((x[property] === y[property]) ? 0 : ((x[property] > y[property]) ? 1 : -1));
-    };
 }

@@ -1,8 +1,7 @@
 import { core, flags, SfdxCommand } from '@salesforce/command';
 import * as fs from 'fs';
-import { inspect } from 'util';
 import { compareObjects } from '../../../lib/Comparison';
-import { xmlToInstance, xmlToJson } from '../../../lib/Utils';
+import { xmlToInstance } from '../../../lib/Utils';
 
 // Initialize Messages with the current plugin directory
 core.Messages.importMessagesDirectory(__dirname);
@@ -17,7 +16,7 @@ export default class Files extends SfdxCommand {
 
     public static examples = [
         `$ sfdx collate:compare:files --primary directory/file1.xml --secondary directory/file2.xml
-  `
+    `
     ];
 
     public static args = [{ name: 'file' }];
@@ -27,21 +26,12 @@ export default class Files extends SfdxCommand {
         secondary: flags.string({ char: 's', description: messages.getMessage('secondaryFlagDescription'), required: true })
     };
 
-    // Comment this out if your command does not require an org username
-    // protected static requiresUsername = true;
-
-    // Comment this out if your command does not support a hub org username
-    // protected static supportsDevhubUsername = true;
-
-    // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
     protected static requiresProject = false;
 
-    // public async run(): Promise<core.AnyJson> {
     public run() {
-
         const primaryXML: string = fs.readFileSync(this.flags.primary, 'utf8');
         const secondaryXML: string = fs.readFileSync(this.flags.secondary, 'utf8');
-        // console.log(inspect(xmlToJson(primaryXML),{depth: null}));
+
         console.log(compareObjects(xmlToInstance(primaryXML), xmlToInstance(secondaryXML)));
 
         return null;
