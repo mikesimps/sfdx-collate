@@ -9,7 +9,7 @@ core.Messages.importMessagesDirectory(__dirname);
 
 const messages = core.Messages.loadMessages('sfdx-collate', 'build');
 
-export default class Files extends SfdxCommand {
+export default class Build extends SfdxCommand {
 
     public static description = messages.getMessage('commandDescription');
 

@@ -17,7 +17,7 @@ $ npm install -g sfdx-collate
 $ sfdx-collate COMMAND
 running command...
 $ sfdx-collate (-v|--version|version)
-sfdx-collate/0.1.0 darwin-x64 node-v10.9.0
+sfdx-collate/0.1.0 darwin-x64 node-v8.9.4
 $ sfdx-collate --help [COMMAND]
 USAGE
   $ sfdx-collate COMMAND

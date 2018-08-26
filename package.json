@@ -12,8 +12,7 @@
     "csvjson": "^5.1.0",
     "tslib": "1",
     "xml2js": "^0.4.19",
-    "flat": "^4.1.0",
-    "move-property-up-a-level": "^1.0.7"
+    "flat": "^4.1.0"
   },
   "devDependencies": {
     "@oclif/dev-cli": "1",
@@ -43,7 +42,12 @@
   ],
   "homepage": "https://github.com/mikesimps/sfdx-collate",
   "keywords": [
-    "sfdx-plugin"
+    "sfdx-plugin",
+    "salesforce",
+    "sfdc",
+    "sfdx",
+    "typescript",
+    "oclif"
   ],
   "license": "MIT",
   "oclif": {
