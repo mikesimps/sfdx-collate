@@ -53,8 +53,8 @@
   "oclif": {
     "commands": "./lib/commands",
     "topics": {
-      "hello": {
-        "description": "Commands to say hello."
+      "compare": {
+        "description": "Commands to compare and create metadata files."
       }
     },
     "devPlugins": [

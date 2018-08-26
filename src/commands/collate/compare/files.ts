@@ -16,10 +16,13 @@ export default class Files extends SfdxCommand {
 
     public static examples = [
         `$ sfdx collate:compare:files --primary directory/file1.xml --secondary directory/file2.xml
+        "obj","key","left","right","primary","change"
+        "PermissionSet","PermissionSet|fieldPermissions|^field:Custom_Object__c.Custom_Field__c^|editable","false","false","left","Update"
+        ...
     `
     ];
 
-    public static args = [{ name: 'file' }];
+    // public static args = [{ name: 'file' }];
 
     protected static flagsConfig = {
         primary: flags.string({ char: 'p', description: messages.getMessage('primaryFlagDescription'), required: true }),

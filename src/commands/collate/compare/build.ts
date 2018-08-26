@@ -18,7 +18,7 @@ export default class Build extends SfdxCommand {
     `
     ];
 
-    public static args = [{ name: 'file' }];
+    // public static args = [{ name: 'file' }];
 
     protected static flagsConfig = {
       file: flags.string({ char: 'f', description: messages.getMessage('fileFlagDescription'), required: true })

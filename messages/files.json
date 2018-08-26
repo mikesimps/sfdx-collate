@@ -1,5 +1,5 @@
 {
-  "commandDescription": "Compares two metadatafiles",
+  "commandDescription": "Compares two metadatafiles. Currently only PermissionSet files are supported.",
   "primaryFlagDescription": "Path to primary file",
   "secondaryFlagDescription": "Path to secondary file"
 }
