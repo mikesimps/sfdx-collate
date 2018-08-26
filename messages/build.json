@@ -1,0 +1,4 @@
+{
+  "commandDescription": "Generate metadata file from a csv list of comparisons. The csv can be generated using the collate:compare:files command and expects a specific format.",
+  "fileFlagDescription": "Path to csv comparison file"
+}
