@@ -1,68 +1,55 @@
-import { deserialize, deserializeAs, serialize, Serialize, serializeAs } from 'cerialize';
+import { deserialize, deserializeAs, serialize, serializeAs } from 'cerialize';
 import { GetKeys } from './Comparison';
 
 export class ApplicationVisibilities implements GetKeys {
+    // Profile and PermissionSet
     @serialize @deserialize public application: string; // key
     @serialize @deserialize public visible: boolean;
-
-    constructor(application?: string, visible?: boolean) {
-        this.application = application;
-        this.visible = visible;
-    }
-
-    // public getKey = (): string => 'application';
-    // public getKeyValue = (): string => String(this[this.getKey()]);
+    @serializeAs('default') @deserializeAs('default') public defaultval: boolean; // profile only
 
     public getKey(): string { return 'application'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-class ClassAccesses {
+export class ClassAccesses {
+    // Profile and PermissionSet
     @serialize @deserialize public apexClass: string;
     @serialize @deserialize public enabled: boolean;
-
-    // public getKey = (): string => 'apexClass';
-    // public getKeyValue = (): string => String(this[this.getKey()]);
 
     public getKey(): string { return 'apexClass'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-class CustomPermissions implements GetKeys {
+export class CustomPermissions implements GetKeys {
+    // Profile and PermissionSet
     @serialize @deserialize public enabled: boolean;
     @serialize @deserialize public name: string;
-
-    // public getKey = (): string => 'name';
-    // public getKeyValue = (): string => String(this[this.getKey()]);
 
     public getKey(): string { return 'name'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-class ExternalDataSourceAccesses implements GetKeys {
+export class ExternalDataSourceAccesses implements GetKeys {
+    // Profile and PermissionSet
     @serialize @deserialize public enabled: boolean;
     @serialize @deserialize public externalDataSource: string;
-
-    // public getKey = (): string => 'externalDataSource';
-    // public getKeyValue = (): string => String(this[this.getKey()]);
 
     public getKey(): string { return 'externalDataSource'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-class FieldPermissions implements GetKeys {
+export class FieldPermissions implements GetKeys {
+    // Profile and PermissionSet
     @serialize @deserialize public editable: boolean;
     @serialize @deserialize public field: string;
     @serialize @deserialize public readable: boolean;
-
-    // public getKey = (): string => 'field';
-    // public getKeyValue = (): string => String(this[this.getKey()]);
 
     public getKey(): string { return 'field'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-class ObjectPermissions implements GetKeys {
+export class ObjectPermissions implements GetKeys {
+    // Profile and PermissionSet
     @serialize @deserialize public object?: string; // key
     @serialize @deserialize public allowCreate?: boolean;
     @serialize @deserialize public allowDelete?: boolean;
@@ -71,24 +58,12 @@ class ObjectPermissions implements GetKeys {
     @serialize @deserialize public modifyAllRecords?: boolean;
     @serialize @deserialize public viewAllRecords?: boolean;
 
-    constructor(object: string, allowCreate?: boolean, allowDelete?: boolean, allowEdit?: boolean, allowRead?: boolean,  modifyAllRecords?: boolean, viewAllRecords?: boolean) {
-        this.object = object;
-        this.allowCreate = allowCreate;
-        this.allowDelete = allowDelete;
-        this.allowEdit = allowEdit;
-        this.allowRead = allowRead;
-        this.modifyAllRecords = modifyAllRecords;
-        this.viewAllRecords = viewAllRecords;
-    }
-
-    // public getKey = (): string => 'object';
-    // public getKeyValue = (): string => String(this[this.getKey()]);
-
     public getKey(): string { return 'object'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-class PageAccesses implements GetKeys {
+export class PageAccesses implements GetKeys {
+    // Profile and PermissionSet
     @serialize @deserialize public apexPage: string;
     @serialize @deserialize public enabled: boolean;
 
@@ -96,15 +71,21 @@ class PageAccesses implements GetKeys {
     public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-class RecordTypeVisibilities implements GetKeys {
+export class RecordTypeVisibilities implements GetKeys {
+    // Profile and PermissionSet
     @serialize @deserialize public recordType: string;
     @serialize @deserialize public visible: boolean;
+
+    // Profile
+    @serialize @deserialize public defaultval: string;
+    @serialize @deserialize public personAccountDefault: boolean;
 
     public getKey(): string { return 'recordType'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-class TabSettings implements GetKeys {
+export class TabSettings implements GetKeys {
+    // Profile (known as TablVisibilities) and PermissionSet
     @serialize @deserialize public tab: string;
     @serialize @deserialize public visibility: TabVisibility;
 
@@ -121,13 +102,9 @@ export const tabVisibility = {
 type TabVisibility = keyof typeof tabVisibility;
 
 export class UserPermissions implements GetKeys {
+    // Profile and PermissionSet
     @serialize @deserialize public enabled: boolean;
     @serialize @deserialize public name: string;
-
-    constructor(enabled?: boolean, name?: string) {
-        this.enabled = enabled;
-        this.name = name;
-    }
 
     public getKey(): string { return 'name'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
@@ -149,13 +126,6 @@ export class PermissionSet implements GetKeys {
     @serializeAs(RecordTypeVisibilities) @deserializeAs(RecordTypeVisibilities) public recordTypeVisibilities?: RecordTypeVisibilities[] = [];
     @serializeAs(TabSettings) @deserializeAs(TabSettings) public tabSettings?: TabSettings[] = [];
     @serializeAs(UserPermissions) @deserializeAs(UserPermissions) public userPermissions?: UserPermissions[] = [];
-
-    constructor(label?: string, description?: string, applicationVisibilities?: ApplicationVisibilities[], userPermissions?: UserPermissions[]) {
-        this.label = label;
-        this.applicationVisibilities = applicationVisibilities;
-        this.userPermissions = userPermissions;
-        this.description = description;
-    }
 
     public getKey(): string { return 'label'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }

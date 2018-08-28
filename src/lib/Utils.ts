@@ -2,6 +2,7 @@ import { Deserialize, Serialize } from 'cerialize';
 import * as xml2js from 'xml2js';
 import { GetKeys } from './Comparison';
 import { PermissionSet } from './Permissionset';
+import { Profile } from './Profile';
 
 export function instanceToXml<T>(inst: T): string {
     const opts = {
@@ -16,6 +17,10 @@ export function instanceToJson<T>(inst: T): string {
     return Serialize(inst);
 }
 
+export function jsonToInstance<T>(json: object, mdtype: string): T {
+    return Deserialize(json, instanceTypes[mdtype]);
+}
+
 export function xmlToJson(xml: string): JSON {
     const primaryParser = new xml2js.Parser();
 
@@ -26,23 +31,7 @@ export function xmlToJson(xml: string): JSON {
 
 export function xmlToInstance(xml: string) {
     const obj: JSON = xmlToJson(xml);
-    let inst;
-    switch (Object.keys(obj)[0]) {
-        case 'PermissionSet': {
-            inst = normalizeObject(Deserialize(obj[Object.keys(obj)[0]], PermissionSet));
-            break;
-        }
-        // for later implementation
-        // case 'Profile': {
-        //     inst = normalizeObject(Deserialize(obj[Object.keys(obj)[0]], Profile));
-        //     break;
-        // }
-        // case 'SharingRule': {
-        //     inst = normalizeObject(Deserialize(obj[Object.keys(obj)[0]], SharingRule));
-        //     break;
-        // }
-    }
-    return inst;
+    return normalizeObject(Deserialize(obj[Object.keys(obj)[0]], instanceTypes[Object.keys(obj)[0]]));
 }
 
 /**
@@ -73,6 +62,7 @@ export function sortByProperty(property) {
     };
 }
 
-export const instanceTypes = {
-    PermissionSet: (PermissionSet)
+export const instanceTypes: object = {
+    PermissionSet: (PermissionSet),
+    Profile: (Profile)
 };

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <applicationVisibilities>
+        <application>Application1</application>
+        <visible>true</visible>
+    </applicationVisibilities>
+    <applicationVisibilities>
+        <application>Application2</application>
+        <visible>false</visible>
+    </applicationVisibilities>
+    <applicationVisibilities>
+        <application>Application3</application>
+        <visible>false</visible>
+    </applicationVisibilities>
+
+
+
+
+    <classAccesses>
+        <apexClass>MyClass1</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>MyClass2</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>MyClass3</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+
+
+
+
+    <customPermissions>
+        <enabled>false</enabled>
+        <name>MyCustomPermission1</name>
+    </customPermissions>
+    <customPermissions>
+        <enabled>true</enabled>
+        <name>MyCustomPermission2</name>
+    </customPermissions>
+    <customPermissions>
+        <enabled>true</enabled>
+        <name>MyCustomPermission3</name>
+    </customPermissions>
+
+
+
+
+    <externalDataSourceAccesses>
+        <externalDataSource>ExternalDataSource1</externalDataSource>
+        <enabled>true</enabled>
+    </externalDataSourceAccesses>
+    <externalDataSourceAccesses>
+        <externalDataSource>ExternalDataSource2</externalDataSource>
+        <enabled>false</enabled>
+    </externalDataSourceAccesses>
+    <externalDataSourceAccesses>
+        <externalDataSource>ExternalDataSource3</externalDataSource>
+        <enabled>true</enabled>
+    </externalDataSourceAccesses>
+
+
+
+
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>MyObject__c.My_Field_Name1__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>MyObject__c.My_Field_Name2__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>MyObject__c.My_Field_Name3__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+
+
+
+
+
+    <pageAccesses>
+        <apexPage>ApexPage1</apexPage>
+        <enabled>true</enabled>
+    </pageAccesses>
+    <pageAccesses>
+        <apexPage>ApexPage2</apexPage>
+        <enabled>true</enabled>
+    </pageAccesses>
+    <pageAccesses>
+        <apexPage>ApexPage3</apexPage>
+        <enabled>true</enabled>
+    </pageAccesses>
+    <RecordTypeVisibilities>
+        <recordType>RecordType1</recordType>
+        <visible>true</visible>
+    </RecordTypeVisibilities>
+    <RecordTypeVisibilities>
+        <recordType>RecordType2</recordType>
+        <visible>true</visible>
+    </RecordTypeVisibilities>
+    <RecordTypeVisibilities>
+        <recordType>RecordType3</recordType>
+        <visible>true</visible>
+    </RecordTypeVisibilities>
+    <tabSettings>
+        <tab>Tab1</tab>
+        <visibility>true</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>Tab2</tab>
+        <visibility>false</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>Tab3</tab>
+        <visibility>true</visibility>
+    </tabSettings>
+
+
+
+
+    <userPermissions>
+        <enabled>true</enabled>
+        <name>UserPermission1</name>
+    </userPermissions>
+    <userPermissions>
+        <enabled>true</enabled>
+        <name>UserPermission2</name>
+    </userPermissions>
+    <userPermissions>
+        <enabled>false</enabled>
+        <name>UserPermission3</name>
+    </userPermissions>
+    <objectPermissions>
+        <allowCreate>false</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>false</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>MyObject1__c</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>false</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>MyObject2__c</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+    <objectPermissions>
+        <allowCreate>false</allowCreate>
+        <allowDelete>false</allowDelete>
+        <allowEdit>false</allowEdit>
+        <allowRead>false</allowRead>
+        <modifyAllRecords>true</modifyAllRecords>
+        <object>MyObject3__c</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+
+
+
+
+
+
+
+
+
+    
+    <label>Permission Set Number 1</label>
+    <license>Salesforce</license>
+    <description>A Description1</description>
+</PermissionSet>

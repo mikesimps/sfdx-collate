@@ -1,0 +1,7 @@
+{
+  "commandDescription": "Compares two metadatafiles. Currently only PermissionSet files are supported.",
+  "metadatatypeFlagDescription": "The metadata type to be compared",
+  "primaryFlagDescription": "sfdxAlias.apiName of primary metadata file",
+  "secondaryFlagDescription": "sfdxAlias.apiName of secondary metadata file",
+  "modeFlagDescription": "What comparison values should be returned"
+}

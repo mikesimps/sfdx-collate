@@ -27,8 +27,48 @@ This plugin was written to make it easier for developers (and even admins) to he
 ## Commands
 
 <!-- commands -->
+* [`sfdx-collate collate:compare:api`](#sfdx-collate-collatecompareapi)
 * [`sfdx-collate collate:compare:build`](#sfdx-collate-collatecomparebuild)
 * [`sfdx-collate collate:compare:files`](#sfdx-collate-collatecomparefiles)
+
+## `sfdx-collate collate:compare:api`
+
+Compares two metadatafiles. Currently only PermissionSet files are supported.
+
+```
+USAGE
+  $ sfdx-collate collate:compare:api
+
+OPTIONS
+  -m, --mode=full|inner|exact|diff                What comparison values should be returned
+  -p, --primary=primary                           (required) sfdxAlias.apiName of primary metadata file
+  -s, --secondary=secondary                       (required) sfdxAlias.apiName of secondary metadata file
+  -t, --metadatatype=PermissionSet|Profile        (required) The metadata type to be compared
+  --json                                          format output as json
+  --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
+
+EXAMPLE
+  $ sfdx collate:compare:api --metadataType PermissionSet --primary uat.All_Users --secondary prod.All_Users --mode full
+           "obj","key","primary","secondary","final","change"
+         
+  "PermissionSet","PermissionSet|applicationVisibilities|^application:Application1^|application","Application1","Applica
+  tion1","Application1","Update"
+         
+  "PermissionSet","PermissionSet|applicationVisibilities|^application:Application1^|visible","true","true","true","Updat
+  e"
+         
+  "PermissionSet","PermissionSet|applicationVisibilities|^application:Application2^|application","Application2",,,"Add"
+           "PermissionSet","PermissionSet|applicationVisibilities|^application:Application2^|visible","false",,,"Add"
+         
+  "PermissionSet","PermissionSet|applicationVisibilities|^application:Application3^|application","Application3","Applica
+  tion3","Application3","Update"
+         
+  "PermissionSet","PermissionSet|applicationVisibilities|^application:Application3^|visible","false","true","true","Upda
+  te"
+           ...
+```
+
+_See code: [src/commands/collate/compare/api.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.2.0/src/commands/collate/compare/api.ts)_
 
 ## `sfdx-collate collate:compare:build`
 
@@ -47,7 +87,7 @@ EXAMPLE
   $ sfdx collate:compare:build --file directory/comparison.csv
 ```
 
-_See code: [src/commands/collate/compare/build.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.1.0/src/commands/collate/compare/build.ts)_
+_See code: [src/commands/collate/compare/build.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.2.0/src/commands/collate/compare/build.ts)_
 
 ## `sfdx-collate collate:compare:files`
 
@@ -58,19 +98,36 @@ USAGE
   $ sfdx-collate collate:compare:files
 
 OPTIONS
+  -m, --mode=full|inner|exact|diff                What comparison values should be returned
   -p, --primary=primary                           (required) Path to primary file
   -s, --secondary=secondary                       (required) Path to secondary file
   --json                                          format output as json
   --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
 
 EXAMPLE
-  $ sfdx collate:compare:files --primary directory/file1.xml --secondary directory/file2.xml
+  $ sfdx collate:compare:files --primary directory/file1.xml --secondary directory/file2.xml --mode full
            "obj","key","left","right","primary","change"
          
   "PermissionSet","PermissionSet|fieldPermissions|^field:Custom_Object__c.Custom_Field__c^|editable","false","false","le
   ft","Update"
+           "obj","key","primary","secondary","final","change"
+         
+  "PermissionSet","PermissionSet|applicationVisibilities|^application:Application1^|application","Application1","Applica
+  tion1","Application1","Update"
+         
+  "PermissionSet","PermissionSet|applicationVisibilities|^application:Application1^|visible","true","true","true","Updat
+  e"
+         
+  "PermissionSet","PermissionSet|applicationVisibilities|^application:Application2^|application","Application2",,,"Add"
+           "PermissionSet","PermissionSet|applicationVisibilities|^application:Application2^|visible","false",,,"Add"
+         
+  "PermissionSet","PermissionSet|applicationVisibilities|^application:Application3^|application","Application3","Applica
+  tion3","Application3","Update"
+         
+  "PermissionSet","PermissionSet|applicationVisibilities|^application:Application3^|visible","false","true","true","Upda
+  te"
            ...
 ```
 
-_See code: [src/commands/collate/compare/files.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.1.0/src/commands/collate/compare/files.ts)_
+_See code: [src/commands/collate/compare/files.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.2.0/src/commands/collate/compare/files.ts)_
 <!-- commandsstop -->

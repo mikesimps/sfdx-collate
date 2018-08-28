@@ -30,7 +30,7 @@ export default class Build extends SfdxCommand {
         const compFile: string = fs.readFileSync(this.flags.file, 'utf8');
         const comparisons: Comparison[] = csvToComparisons(compFile).sort(sortByProperty('key'));
 
-        let cmpObjRaw = comparisons.reduce((o, key) => ({ ...o, [key.key]: key.left }), {});
+        let cmpObjRaw = comparisons.reduce((o, key) => ({ ...o, [key.key]: key.final }), {});
         cmpObjRaw = unflatten(cmpObjRaw, { delimiter: '|', safe: true });
         const instType: string = Object.keys(cmpObjRaw)[0];
         const cmpObjNormalized: object = {};

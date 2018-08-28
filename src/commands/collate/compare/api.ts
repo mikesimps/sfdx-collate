@@ -1,23 +1,18 @@
 import { core, flags, SfdxCommand } from '@salesforce/command';
-import * as fs from 'fs';
+import { Connection, Org } from '@salesforce/core';
 import { compareObjects } from '../../../lib/Comparison';
-import { xmlToInstance } from '../../../lib/Utils';
+import { jsonToInstance } from '../../../lib/Utils';
 
-// Initialize Messages with the current plugin directory
 core.Messages.importMessagesDirectory(__dirname);
 
-// Load the specific messages for this file. Messages from @salesforce/command, @salesforce/core,
-// or any library that is using the messages framework can also be loaded this way.
-const messages = core.Messages.loadMessages('sfdx-collate', 'files');
+const messages = core.Messages.loadMessages('sfdx-collate', 'api');
 
-export default class Files extends SfdxCommand {
+export default class CollateApi extends SfdxCommand {
 
     public static description = messages.getMessage('commandDescription');
 
     public static examples = [
-        `$ sfdx collate:compare:files --primary directory/file1.xml --secondary directory/file2.xml --mode full
-        "obj","key","left","right","primary","change"
-        "PermissionSet","PermissionSet|fieldPermissions|^field:Custom_Object__c.Custom_Field__c^|editable","false","false","left","Update"
+        `$ sfdx collate:compare:api --metadataType PermissionSet --primary uat.All_Users --secondary prod.All_Users --mode full
         "obj","key","primary","secondary","final","change"
         "PermissionSet","PermissionSet|applicationVisibilities|^application:Application1^|application","Application1","Application1","Application1","Update"
         "PermissionSet","PermissionSet|applicationVisibilities|^application:Application1^|visible","true","true","true","Update"
@@ -32,6 +27,7 @@ export default class Files extends SfdxCommand {
     // public static args = [{ name: 'file' }];
 
     protected static flagsConfig = {
+        metadatatype: flags.string({ char: 't', description: messages.getMessage('metadatatypeFlagDescription'), required: true, options: ['PermissionSet', 'Profile']}),
         primary: flags.string({ char: 'p', description: messages.getMessage('primaryFlagDescription'), required: true }),
         secondary: flags.string({ char: 's', description: messages.getMessage('secondaryFlagDescription'), required: true }),
         mode: flags.string({ char: 'm', description: messages.getMessage('modeFlagDescription'), required: false, options: ['full', 'inner', 'exact', 'diff']})
@@ -39,11 +35,28 @@ export default class Files extends SfdxCommand {
 
     protected static requiresProject = false;
 
-    public run() {
-        const primaryXML: string = fs.readFileSync(this.flags.primary, 'utf8');
-        const secondaryXML: string = fs.readFileSync(this.flags.secondary, 'utf8');
+    public async run() {
+        const primaryApiName: string = this.flags.primary.split('.')[1];
+        const secondaryApiName: string = this.flags.secondary.split('.')[1];
+        const metadataType: string = this.flags.metadatatype;
 
-        console.log(compareObjects(xmlToInstance(primaryXML), xmlToInstance(secondaryXML), this.flags.mode));
+        const primaryOrg: Org = await Org.create(this.flags.primary.split('.')[0]);
+        const primaryConn: Connection = await primaryOrg.getConnection();
+        const primaryObj = primaryConn.metadata.read(metadataType, primaryApiName, (err, metadata) => {
+            if (err) { console.error(err); }
+            return metadata;
+        });
+
+        const secondaryOrg: Org = await Org.create(this.flags.secondary.split('.')[0]);
+        const secondaryConn: Connection = await secondaryOrg.getConnection();
+        const secondaryObj = secondaryConn.metadata.read(metadataType, secondaryApiName, (err, metadata) => {
+            if (err) { console.error(err); }
+            return metadata;
+        });
+
+        Promise.all([primaryObj, secondaryObj]).then(res => {
+            console.log(compareObjects(jsonToInstance(res[0], metadataType), jsonToInstance(res[1], metadataType), this.flags.mode));
+        }).catch();
 
         return null;
     }
