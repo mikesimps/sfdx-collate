@@ -13,15 +13,10 @@ export default class CollateApi extends SfdxCommand {
 
     public static examples = [
         `$ sfdx collate:compare:api --metadataType PermissionSet --primary uat.All_Users --secondary prod.All_Users --mode full
-        "obj","key","primary","secondary","final","change"
-        "PermissionSet","PermissionSet|applicationVisibilities|^application:Application1^|application","Application1","Application1","Application1","Update"
-        "PermissionSet","PermissionSet|applicationVisibilities|^application:Application1^|visible","true","true","true","Update"
-        "PermissionSet","PermissionSet|applicationVisibilities|^application:Application2^|application","Application2",,,"Add"
-        "PermissionSet","PermissionSet|applicationVisibilities|^application:Application2^|visible","false",,,"Add"
-        "PermissionSet","PermissionSet|applicationVisibilities|^application:Application3^|application","Application3","Application3","Application3","Update"
-        "PermissionSet","PermissionSet|applicationVisibilities|^application:Application3^|visible","false","true","true","Update"
-        ...
-    `
+
+"obj","key","primary","secondary","final","change"
+...
+`
     ];
 
     // public static args = [{ name: 'file' }];

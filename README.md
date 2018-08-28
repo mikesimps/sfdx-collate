@@ -1,13 +1,11 @@
 # sfdx-collate
 
+This plugin was written to make it easier for developers (and even admins) to help analyze and clean up their Salesforce org metadata. Initial functionality is focused on Permission Sets which are particularly painful to compare and merge because of their size and complexity. Currently that is the only metadata type that is supported, but see the issues board for more information on what may be coming. Contributions and requests/ideas are welcomed.
+
 [![Version](https://img.shields.io/npm/v/sfdx-collate.svg)](https://npmjs.org/package/sfdx-collate)
 [![Known Vulnerabilities](https://snyk.io/test/github/mikesimps/sfdx-collate/badge.svg)](https://snyk.io/test/github/mikesimps/sfdx-collate)
 [![Downloads/week](https://img.shields.io/npm/dw/sfdx-collate.svg)](https://npmjs.org/package/sfdx-collate)
 [![License](https://img.shields.io/npm/l/sfdx-collate.svg)](https://github.com/mikesimps/sfdx-collate/blob/master/package.json)
-
-## Purpose
-
-This plugin was written to make it easier for developers (and even admins) to help analyze and clean up their Salesforce org metadata. Initial functionality is focused on Permission Sets which are particularly painful to compare and merge because of their size and complexity. Currently that is the only metadata type that is supported, but see the issues board for more information on what may be coming. Contributions and requests/ideas are welcomed.
 
 <!-- install -->
 
@@ -23,6 +21,70 @@ This plugin was written to make it easier for developers (and even admins) to he
 1. Install plugin: `sfdx plugins:install sfdx-collate`
 
 <!-- installstop -->
+
+### Try it out!
+
+1. Clone the sample gist:
+```
+$ git clone git@gist.github.com:6427ea434581058a14fd3b084b87a5ff.git
+```
+2. Move into directory: 
+```
+$ cd 6427ea434581058a14fd3b084b87a5ff/
+```
+3. Make script executable: 
+```
+$ chmod +x ./sfdx-collate-permissionsets.sh
+```
+4. Generate examples:
+```
+$ ./sfdx-collate-permissionsets.sh` 
+```
+**OR** Run a specific example:
+```
+$ sfdx collate:compare:files  -p PermissionSet1.xml -s PermissionSet2.xml > permissionset_default.csv
+```
+
+## Info
+
+### Comparison File Format
+
+Output as a CSV for easy editing. When using the build command, it blindly uses whatever values are in the final column which means you can overwrite it with whatever you need.
+
+| field  | purpose
+|---|---
+| obj  |  the metadata file type being compared
+| key  | the unique value for each row in the file
+| primary  | the xml property value (between the tags) for the primary file
+| secondary  | the xml property value (between the tags) for the secondary file
+| final | the value that will be used in the build process, set depending on mode used
+| change | Match - exact match in key and value <br/>Add - key did not exist in one of the files<br/>Update - keys were matched, but values are different
+
+### Comparison Modes
+
+| mode  | output
+|---|---
+| full | (default) include all items from both files<br>final value is set to primary if it exists
+| diff | only include items that are different (adds or updates)<br>final value is set to primary if it exists, otherwise secondary
+| exact | only includes items where keys and values match exactly<br>final value is set to primary
+| inner | only includes items where keys match, but values can be different<br>final value is set to primary
+
+### Command Parameter Format collate:compare:api
+
+The command requires a shorthand of `sfdxAlias.APIName` which is then parsed. For Profiles that have spaces in their names, you will have to escape the name when passing it. For example `My Profile Name` would be:
+
+... -p myorg.`My\ Profile\ Name` -s ...
+
+For Standard Profile you must use their API names which are not intuitive.
+
+| Profile Name  | Profile fullName (api name)
+|---|---
+|System Administrator | Admin
+|Standard User | Standard
+
+Full List of Standard Profile API Names: [Here](https://salesforce.stackexchange.com/questions/159005/listing-of-all-standard-profiles-and-their-metadata-api-names)
+
+
 
 ## Commands
 
@@ -49,23 +111,9 @@ OPTIONS
 
 EXAMPLE
   $ sfdx collate:compare:api --metadataType PermissionSet --primary uat.All_Users --secondary prod.All_Users --mode full
-           "obj","key","primary","secondary","final","change"
-         
-  "PermissionSet","PermissionSet|applicationVisibilities|^application:Application1^|application","Application1","Applica
-  tion1","Application1","Update"
-         
-  "PermissionSet","PermissionSet|applicationVisibilities|^application:Application1^|visible","true","true","true","Updat
-  e"
-         
-  "PermissionSet","PermissionSet|applicationVisibilities|^application:Application2^|application","Application2",,,"Add"
-           "PermissionSet","PermissionSet|applicationVisibilities|^application:Application2^|visible","false",,,"Add"
-         
-  "PermissionSet","PermissionSet|applicationVisibilities|^application:Application3^|application","Application3","Applica
-  tion3","Application3","Update"
-         
-  "PermissionSet","PermissionSet|applicationVisibilities|^application:Application3^|visible","false","true","true","Upda
-  te"
-           ...
+
+  "obj","key","primary","secondary","final","change"
+  ...
 ```
 
 _See code: [src/commands/collate/compare/api.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.2.0/src/commands/collate/compare/api.ts)_
@@ -106,27 +154,9 @@ OPTIONS
 
 EXAMPLE
   $ sfdx collate:compare:files --primary directory/file1.xml --secondary directory/file2.xml --mode full
-           "obj","key","left","right","primary","change"
-         
-  "PermissionSet","PermissionSet|fieldPermissions|^field:Custom_Object__c.Custom_Field__c^|editable","false","false","le
-  ft","Update"
-           "obj","key","primary","secondary","final","change"
-         
-  "PermissionSet","PermissionSet|applicationVisibilities|^application:Application1^|application","Application1","Applica
-  tion1","Application1","Update"
-         
-  "PermissionSet","PermissionSet|applicationVisibilities|^application:Application1^|visible","true","true","true","Updat
-  e"
-         
-  "PermissionSet","PermissionSet|applicationVisibilities|^application:Application2^|application","Application2",,,"Add"
-           "PermissionSet","PermissionSet|applicationVisibilities|^application:Application2^|visible","false",,,"Add"
-         
-  "PermissionSet","PermissionSet|applicationVisibilities|^application:Application3^|application","Application3","Applica
-  tion3","Application3","Update"
-         
-  "PermissionSet","PermissionSet|applicationVisibilities|^application:Application3^|visible","false","true","true","Upda
-  te"
-           ...
+
+  "obj","key","primary","secondary","final","change"
+  ...
 ```
 
 _See code: [src/commands/collate/compare/files.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.2.0/src/commands/collate/compare/files.ts)_

@@ -16,17 +16,10 @@ export default class Files extends SfdxCommand {
 
     public static examples = [
         `$ sfdx collate:compare:files --primary directory/file1.xml --secondary directory/file2.xml --mode full
-        "obj","key","left","right","primary","change"
-        "PermissionSet","PermissionSet|fieldPermissions|^field:Custom_Object__c.Custom_Field__c^|editable","false","false","left","Update"
-        "obj","key","primary","secondary","final","change"
-        "PermissionSet","PermissionSet|applicationVisibilities|^application:Application1^|application","Application1","Application1","Application1","Update"
-        "PermissionSet","PermissionSet|applicationVisibilities|^application:Application1^|visible","true","true","true","Update"
-        "PermissionSet","PermissionSet|applicationVisibilities|^application:Application2^|application","Application2",,,"Add"
-        "PermissionSet","PermissionSet|applicationVisibilities|^application:Application2^|visible","false",,,"Add"
-        "PermissionSet","PermissionSet|applicationVisibilities|^application:Application3^|application","Application3","Application3","Application3","Update"
-        "PermissionSet","PermissionSet|applicationVisibilities|^application:Application3^|visible","false","true","true","Update"
-        ...
-    `
+
+"obj","key","primary","secondary","final","change"
+...
+`
     ];
 
     // public static args = [{ name: 'file' }];
