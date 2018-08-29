@@ -1,6 +1,6 @@
 # sfdx-collate
 
-This plugin was written to make it easier for developers (and even admins) to help analyze and clean up their Salesforce org metadata. Initial functionality is focused on Permission Sets which are particularly painful to compare and merge because of their size and complexity. Currently that is the only metadata type that is supported, but see the issues board for more information on what may be coming. Contributions and requests/ideas are welcomed.
+This plugin was written to make it easier for developers (and even admins) to help analyze and clean up their Salesforce org metadata. Initial functionality is focused on PermissionSets and Profiles which are particularly painful to compare and merge because of their size and complexity. Currently those are the only metadata types that are supported, but see the issues board for more information on what may be coming. Contributions and requests/ideas are welcomed.
 
 [![Version](https://img.shields.io/npm/v/sfdx-collate.svg)](https://npmjs.org/package/sfdx-collate)
 [![Known Vulnerabilities](https://snyk.io/test/github/mikesimps/sfdx-collate/badge.svg)](https://snyk.io/test/github/mikesimps/sfdx-collate)
