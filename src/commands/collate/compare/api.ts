@@ -22,7 +22,7 @@ export default class CollateApi extends SfdxCommand {
     // public static args = [{ name: 'file' }];
 
     protected static flagsConfig = {
-        metadatatype: flags.string({ char: 't', description: messages.getMessage('metadatatypeFlagDescription'), required: true, options: ['PermissionSet', 'Profile']}),
+        metadatatype: flags.string({ char: 't', description: messages.getMessage('metadatatypeFlagDescription'), required: true, options: ['PermissionSet', 'Profile', 'SharingRules']}),
         primary: flags.string({ char: 'p', description: messages.getMessage('primaryFlagDescription'), required: true }),
         secondary: flags.string({ char: 's', description: messages.getMessage('secondaryFlagDescription'), required: true }),
         mode: flags.string({ char: 'm', description: messages.getMessage('modeFlagDescription'), required: false, options: ['full', 'inner', 'exact', 'diff']})

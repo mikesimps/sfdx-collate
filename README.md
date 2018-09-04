@@ -1,6 +1,11 @@
 # sfdx-collate
+This plugin was written to make it easier for developers (and admins!) to help analyze and clean up their Salesforce org metadata. Initial functionality is focused on permission based metadata which are particularly painful to compare and merge because of their size and complexity. Supported metadata types listed below. Contributions and requests/ideas are welcomed.
 
-This plugin was written to make it easier for developers (and even admins) to help analyze and clean up their Salesforce org metadata. Initial functionality is focused on PermissionSets and Profiles which are particularly painful to compare and merge because of their size and complexity. Currently those are the only metadata types that are supported, but see the issues board for more information on what may be coming. Contributions and requests/ideas are welcomed.
+|Type| Notes |
+|-:|:-:|
+|PermissionSet|
+|Profile|
+|SharingRules|
 
 [![Version](https://img.shields.io/npm/v/sfdx-collate.svg)](https://npmjs.org/package/sfdx-collate)
 [![Known Vulnerabilities](https://snyk.io/test/github/mikesimps/sfdx-collate/badge.svg)](https://snyk.io/test/github/mikesimps/sfdx-collate)
@@ -102,12 +107,12 @@ USAGE
   $ sfdx-collate collate:compare:api
 
 OPTIONS
-  -m, --mode=full|inner|exact|diff                What comparison values should be returned
-  -p, --primary=primary                           (required) sfdxAlias.apiName of primary metadata file
-  -s, --secondary=secondary                       (required) sfdxAlias.apiName of secondary metadata file
-  -t, --metadatatype=PermissionSet|Profile        (required) The metadata type to be compared
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
+  -m, --mode=full|inner|exact|diff                       What comparison values should be returned
+  -p, --primary=primary                                  (required) sfdxAlias.apiName of primary metadata file
+  -s, --secondary=secondary                              (required) sfdxAlias.apiName of secondary metadata file
+  -t, --metadatatype=PermissionSet|Profile|SharingRules  (required) The metadata type to be compared
+  --json                                                 format output as json
+  --loglevel=(trace|debug|info|warn|error|fatal)         logging level for this command invocation
 
 EXAMPLE
   $ sfdx collate:compare:api --metadataType PermissionSet --primary uat.All_Users --secondary prod.All_Users --mode full
@@ -116,7 +121,7 @@ EXAMPLE
   ...
 ```
 
-_See code: [src/commands/collate/compare/api.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.2.0/src/commands/collate/compare/api.ts)_
+_See code: [src/commands/collate/compare/api.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.3.0/src/commands/collate/compare/api.ts)_
 
 ## `sfdx-collate collate:compare:build`
 
@@ -135,7 +140,7 @@ EXAMPLE
   $ sfdx collate:compare:build --file directory/comparison.csv
 ```
 
-_See code: [src/commands/collate/compare/build.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.2.0/src/commands/collate/compare/build.ts)_
+_See code: [src/commands/collate/compare/build.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.3.0/src/commands/collate/compare/build.ts)_
 
 ## `sfdx-collate collate:compare:files`
 
@@ -159,5 +164,5 @@ EXAMPLE
   ...
 ```
 
-_See code: [src/commands/collate/compare/files.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.2.0/src/commands/collate/compare/files.ts)_
+_See code: [src/commands/collate/compare/files.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.3.0/src/commands/collate/compare/files.ts)_
 <!-- commandsstop -->

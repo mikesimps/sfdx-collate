@@ -1,8 +1,7 @@
 import { deserialize, deserializeAs, serialize, serializeAs } from 'cerialize';
-import { GetKeys } from './Comparison';
 import { ApplicationVisibilities, ClassAccesses, CustomPermissions, ExternalDataSourceAccesses, FieldPermissions, ObjectPermissions, PageAccesses, RecordTypeVisibilities, TabSettings, UserPermissions } from './PermissionSet';
 
-export class CategoryGroupVisibility implements GetKeys {
+export class CategoryGroupVisibility {
     @serialize @deserialize public dataCategories: string;
     @serialize @deserialize public dataCategoryGroup: string;
     @serialize @deserialize public visibility: categoryGroupVisibility;
@@ -17,7 +16,7 @@ export enum categoryGroupVisibility {
     'CUSTOM'
 }
 
-export class LayoutAssignments implements GetKeys {
+export class LayoutAssignments {
     @serialize @deserialize public layout: string;
     @serialize @deserialize public recordType?: string;
 
@@ -27,7 +26,7 @@ export class LayoutAssignments implements GetKeys {
     }
 }
 
-export class LoginHours implements GetKeys {
+export class LoginHours {
     // Profile
     @serialize @deserialize public mondayEnd: string;
     @serialize @deserialize public mondayStart: string;
@@ -48,7 +47,7 @@ export class LoginHours implements GetKeys {
     public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-export class LoginIpRanges implements GetKeys {
+export class LoginIpRanges {
     @serialize @deserialize public description: string;
     @serialize @deserialize public endAddress: string;
     @serialize @deserialize public startAddress: string;
@@ -57,7 +56,7 @@ export class LoginIpRanges implements GetKeys {
     public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-export class ProfileActionOverrides implements GetKeys {
+export class ProfileActionOverrides {
     // Profile
     @serialize @deserialize public actionName: string;
     @serialize @deserialize public content: string;
@@ -76,7 +75,7 @@ export enum formFactor {
     'Large'
 }
 
-export class Profile implements GetKeys {
+export class Profile {
     // Unique to Profile
     @serialize @deserialize public fullName: string;
     @serializeAs(CategoryGroupVisibility, 'categoryGroupVisibilities') @deserializeAs(CategoryGroupVisibility, 'categoryGroupVisibilities') public categoryGroupVisibilities?: CategoryGroupVisibility[];

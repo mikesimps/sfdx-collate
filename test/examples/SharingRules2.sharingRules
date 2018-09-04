@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>Lead_Sharing_Rule_2</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>Lead Sharing Rule 2 description</description>
+        <label>Lead Sharing Rule 2</label>
+        <sharedTo>
+            <role>COO</role>
+        </sharedTo>
+        <criteriaItems>
+            <field>LeadSource</field>
+            <operation>equals</operation>
+            <value>Webinar</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>City</field>
+            <operation>equals</operation>
+            <value>Raleigh</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>DoNotCall</field>
+            <operation>equals</operation>
+            <value>False</value>
+        </criteriaItems>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Lead_Sharing_Rule_3</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>Lead Sharing Rule 3 description</description>
+        <label>Lead Sharing Rule 3</label>
+        <sharedTo>
+            <role>COO</role>
+        </sharedTo>
+        <criteriaItems>
+            <field>LeadSource</field>
+            <operation>equals</operation>
+            <value>Web</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>City</field>
+            <operation>equals</operation>
+            <value>Durham</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>DoNotCall</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </criteriaItems>
+    </sharingCriteriaRules>
+    <sharingOwnerRules>
+        <fullName>Lead_Sharing_Rule_1</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>Lead Sharing Rule 1 Description</description>
+        <label>Lead Sharing Rule 1</label>
+        <sharedTo>
+            <roleAndSubordinatesInternal>ChannelSalesTeam</roleAndSubordinatesInternal>
+        </sharedTo>
+        <sharedFrom>
+            <role>CEO</role>
+        </sharedFrom>
+    </sharingOwnerRules>
+    <sharingOwnerRules>
+        <fullName>Lead_Sharing_Rule_5</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>Lead Sharing Rule 5 Description</description>
+        <label>Lead Sharing Rule 5</label>
+        <sharedTo>
+            <roleAndSubordinatesInternal>ChannelSalesTeam</roleAndSubordinatesInternal>
+        </sharedTo>
+        <sharedFrom>
+            <role>CEO</role>
+        </sharedFrom>
+    </sharingOwnerRules>
+</SharingRules>

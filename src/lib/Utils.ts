@@ -3,8 +3,9 @@ import * as xml2js from 'xml2js';
 import { GetKeys } from './Comparison';
 import { PermissionSet } from './Permissionset';
 import { Profile } from './Profile';
+import { SharingRules } from './SharingRules';
 
-export function instanceToXml<T>(inst: T): string {
+export function instanceToXml<T extends GetKeys>(inst: T): string {
     const opts = {
         rootName: (inst.constructor.name),
         xmldec: { version: '1.0', encoding: 'UTF-8' }
@@ -13,23 +14,23 @@ export function instanceToXml<T>(inst: T): string {
     return builder.buildObject(instanceToJson(inst));
 }
 
-export function instanceToJson<T>(inst: T): string {
+export function instanceToJson<T extends GetKeys>(inst: T): string {
     return Serialize(inst);
 }
 
-export function jsonToInstance<T>(json: object, mdtype: string): T {
-    return Deserialize(json, instanceTypes[mdtype]);
+export function jsonToInstance<T extends GetKeys>(json: object, mdtype: string): T {
+    return normalizeObject(Deserialize(json, instanceTypes[mdtype]));
 }
 
 export function xmlToJson(xml: string): JSON {
-    const primaryParser = new xml2js.Parser();
+    const primaryParser = new xml2js.Parser({ explicitArray: false });
 
     let obj: JSON;
     primaryParser.parseString(xml, (_err, result) => { obj = result; });
     return obj;
 }
 
-export function xmlToInstance(xml: string) {
+export function xmlToInstance<T extends GetKeys>(xml: string): T {
     const obj: JSON = xmlToJson(xml);
     return normalizeObject(Deserialize(obj[Object.keys(obj)[0]], instanceTypes[Object.keys(obj)[0]]));
 }
@@ -38,12 +39,12 @@ export function xmlToInstance(xml: string) {
  * Recursively sorts all entities and arrays for easier comparison
  * @param  {} obj
  */
-export function normalizeObject(obj) {
+export function normalizeObject<T>(obj: T): T {
     if (typeof obj === 'object') {
         for (const property in obj) {
             if (obj.hasOwnProperty(property)) {
                 if (obj[property] instanceof Array) {
-                    obj[property] = sortByKey(obj[property]);
+                    obj[String(property)] = sortByKey(obj[String(property)]);
                 }
                 normalizeObject(obj[property]);
             }
@@ -64,5 +65,6 @@ export function sortByProperty(property) {
 
 export const instanceTypes: object = {
     PermissionSet: (PermissionSet),
-    Profile: (Profile)
+    Profile: (Profile),
+    SharingRules: (SharingRules)
 };
