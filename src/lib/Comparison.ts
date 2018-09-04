@@ -131,7 +131,7 @@ export function compareObjects<T extends GetKeys>(primaryObj: T, secondaryObj: T
                     const pArr = p[key] instanceof Array ? p[key] : [p[key]];
                     const sArr = s[key] instanceof Array ? s[key] : [s[key]];
                     delta = compareArray(newPath, pArr, sArr, delta);
-                } else if (typeof p[key] === 'object' || typeof p[key] === 'object') {
+                } else if (typeof p[key] === 'object' || typeof s[key] === 'object') {
                     delta = compareObject(newPath, p[key], s[key], delta);
                 } else {
                     delta = comparePrimitive(newPath, p[key], s[key], delta);
@@ -167,31 +167,35 @@ export function compareObjects<T extends GetKeys>(primaryObj: T, secondaryObj: T
                 p = primary[i];
                 while (j < secondary.length) {
                     s = secondary[j];
-                    if ((Object(p) !== p) || Object(s) !== s ) {
+                    if ((p !== undefined && Object(p) !== p) || (s !== undefined && Object(s) !== s)) {
                         delta = comparePrimitive(path, p, s, delta);
                     } else if (typeof p === 'object' || typeof s === 'object') {
 
-                        if (primary !== undefined) {
+                        if (primary !== undefined && p !== undefined) {
                             keyProp = p.getKey();
                             pKey = p.getKeyValue();
                         } else {
-                            pKey = '~'; // ASCII #126
+                            pKey = ' '; // ASCII #126
                         }
 
-                        if (secondary !== undefined) {
+                        if (secondary !== undefined && s !== undefined) {
                             keyProp = s.getKey();
                             sKey = s.getKeyValue();
                         } else {
-                            sKey = '~'; // ASCII #126
+                            sKey = ' '; // ASCII #126
                         }
 
                         newPath = path + '|^' + keyProp + ':';
                         if (pKey === sKey) {
                             compMap.set(newPath + pKey + '^', ['object', newPath + pKey + '^', p, s]);
                         } else if (pKey > sKey) {
-                            compMap.set(newPath + pKey + '^', ['object', newPath + pKey + '^', p, undefined]);
+                            if (!compMap.has(newPath + pKey + '^')) {
+                                compMap.set(newPath + pKey + '^', ['object', newPath + pKey + '^', p, undefined]);
+                            }
                         } else if (pKey < sKey) {
-                            compMap.set(newPath + sKey + '^', ['object', newPath + pKey + '^', undefined, s]);
+                            if (!compMap.has(newPath + sKey + '^')) {
+                                compMap.set(newPath + sKey + '^', ['object', newPath + sKey + '^', undefined, s]);
+                            }
                         }
                     }
                     j++;
