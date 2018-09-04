@@ -91,6 +91,7 @@ export class SharingCriteriaRule extends SharingBaseRule {
 }
 
 export class SharingRules {
+    @serialize @deserialize public $: string;
     @serializeAs(SharingCriteriaRule) @deserializeAs(SharingCriteriaRule) public sharingCriteriaRules: SharingCriteriaRule[] = new Array();
     @serializeAs(SharingOwnerRule) @deserializeAs(SharingOwnerRule) public sharingOwnerRules: SharingOwnerRule[] = new Array();
     @serializeAs(SharingTerritoryRule) @deserializeAs(SharingTerritoryRule) public sharingTerritoryRules: SharingTerritoryRule[] = new Array();
