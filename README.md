@@ -121,7 +121,7 @@ EXAMPLE
   ...
 ```
 
-_See code: [src/commands/collate/compare/api.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.2.0/src/commands/collate/compare/api.ts)_
+_See code: [src/commands/collate/compare/api.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.3.0/src/commands/collate/compare/api.ts)_
 
 ## `sfdx-collate collate:compare:build`
 
@@ -140,7 +140,7 @@ EXAMPLE
   $ sfdx collate:compare:build --file directory/comparison.csv
 ```
 
-_See code: [src/commands/collate/compare/build.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.2.0/src/commands/collate/compare/build.ts)_
+_See code: [src/commands/collate/compare/build.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.3.0/src/commands/collate/compare/build.ts)_
 
 ## `sfdx-collate collate:compare:files`
 
@@ -164,5 +164,5 @@ EXAMPLE
   ...
 ```
 
-_See code: [src/commands/collate/compare/files.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.2.0/src/commands/collate/compare/files.ts)_
+_See code: [src/commands/collate/compare/files.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.3.0/src/commands/collate/compare/files.ts)_
 <!-- commandsstop -->
