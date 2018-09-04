@@ -5,14 +5,13 @@
         <visible>true</visible>
     </applicationVisibilities>
     <applicationVisibilities>
-        <application>Application2</application>
-        <visible>false</visible>
-    </applicationVisibilities>
-    <applicationVisibilities>
         <application>Application3</application>
         <visible>false</visible>
     </applicationVisibilities>
-
+    <applicationVisibilities>
+        <application>Application2</application>
+        <visible>false</visible>
+    </applicationVisibilities>
 
 
 
