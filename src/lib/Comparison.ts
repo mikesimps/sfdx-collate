@@ -86,152 +86,133 @@ export function comparisonsToJSON(list: Comparison[]): string {
     return Serialize(list);
 }
 
-export function compareObjects(primaryObj: object, secondaryObj: object, mode: string): string {
-    let cmp: Comparison[] = [];
-    const objectName: string = primaryObj.constructor.name;
-    function traverse(obj, obj2) {
-        if (typeof obj === 'object') {
-            for (const p in obj) {
-                if (obj.hasOwnProperty(p)) {
-                    if (obj[p] instanceof Array) {
-                        cmp = cmp.concat(createComparisons(objectName + '|' + p, obj[p], obj2[p]));
-                        traverse(obj[p], obj2[p]);
-                    } else if (isNaN(Number(p))) {
-                        cmp = cmp.concat(createComparisons(objectName + '|' + p, { [p]: obj[p] }, { [p]: obj2[p] }));
-                    }
-                }
-            }
-            return obj;
-        }
-    }
-    traverse(primaryObj, secondaryObj);
-    return comparisonsToCSV(cmp, mode);
-}
+export function compareObjects<T extends GetKeys>(primaryObj: T, secondaryObj: T, mode: string): string {
 
-export function createComparisons<T>(obj: string, primary?: T, secondary?: T): Comparison[];
-export function createComparisons<T extends GetKeys>(obj: string, primary?: T[], secondary?: T[]): Comparison[] {
-    const delta: Comparison[] = new Array();
-    let path: string;
-    let primaryVal: string;
-    let secondaryVal: string;
-    const finalVal: string = ''; // default this to empty, will be populated before output
-    let change: string;
-    let keyProp: string;
-    let l: T;
-    let r: T;
-    let previousLKey: string;
-    let lKey: string;
-    let rKey: string;
-    primary = primary === undefined ? [] : primary;
-    secondary = secondary === undefined ? [] : secondary;
-    const objVal: string = obj.split('|')[0];
-    if (primary.length + secondary.length > 0) {
-        let i = 0;
-        previousLKey = ' ';
-        do {
-            let j = 0;
-            if (primary.length > 0) {
-                l = primary[i];
-                if ((Object.keys(primary).length > 1 || Object.keys(l).length > 1) && typeof l !== 'string') {
-                    keyProp = l.getKey();
-                    lKey = l.getKeyValue();
-                } else {
-                    keyProp = obj.split('|')[1];
-                    lKey = String(l);
-                }
-            } else {
-                lKey = '~';
-            }
-            do {
-                if (secondary.length > 0 ) {
-                    r = secondary[j];
-                    if ((Object.keys(secondary).length > 1 || Object.keys(r).length > 1) && typeof r !== 'string') {
-                        keyProp = r.getKey();
-                        rKey = r.getKeyValue();
-                    } else {
-                        keyProp = obj.split('|')[1];
-                        rKey = String(r);
-                    }
-                } else {
-                    rKey = '~';
-                }
-                // If primary or secondary are primative types
-                if ((Object(l) !== l && l !== undefined) || Object(r) !== r) {
-                    primaryVal = l === undefined ? '' : String(l);
-                    secondaryVal = r === undefined ? '' : String(r);
-                    path = obj;
-                    if (l === r) {
-                        change = 'Match';
-                    } else if (primaryVal === '' || secondaryVal === '') {
-                        change = 'Add';
-                    } else {
-                        change = 'Update';
-                    }
-                    delta.push(new Comparison(objVal, path, primaryVal, secondaryVal, finalVal, change));
-                } else if (lKey === rKey) {
-                    // Loop through each of the objects properties
-                    for (const key in l) {
-                        if (l.hasOwnProperty(key)) {
-                            primaryVal = String(l[key]);
-                            secondaryVal = String(r[key]);
-                            path = obj + '|^' + keyProp + ':' + lKey + '^|' + key;
-                            if (primaryVal === secondaryVal) {
-                                change = 'Match';
-                            } else if (!primaryVal || !secondaryVal) {
-                                change = 'Add';
-                            } else {
-                                change = 'Update';
-                            }
-                            delta.push(new Comparison(objVal, path, primaryVal, secondaryVal, finalVal, change));
-                        }
-                    }
-                } else if (previousLKey < rKey) {
-                    change = 'Add';
-                    if (lKey < rKey) {
-                        // Add primary
-                        for (const key in l) {
-                            if (l.hasOwnProperty(key)) {
-                                primaryVal = String(l[key]);
-                                path = obj + '|^' + keyProp + ':' + lKey + '^|' + key;
-                                delta.push(new Comparison(objVal, path, primaryVal, '', finalVal, change));
-                            }
-                        }
-                        if (j === (primary.length - 1) && secondary.length > 0) {
-                            // Add secondary, because there are no more primary items to loop through
-                            for (const key in l) {
-                                if (r.hasOwnProperty(key)) {
-                                    secondaryVal = String(r[key]);
-                                    path = obj + '|^' + keyProp + ':' + rKey + '^|' + key;
-                                    delta.push(new Comparison(objVal, path, '', secondaryVal, finalVal, change));
-                                }
-                            }
-                        }
-                    } else if (lKey > rKey) {
-                        // Add secondary
-                        for (const key in r) {
-                            if (r.hasOwnProperty(key)) {
-                                secondaryVal = String(r[key]);
-                                path = obj + '|^' + keyProp + ':' + rKey + '^|' + key;
-                                delta.push(new Comparison(objVal, path, '', secondaryVal, finalVal, change));
-                            }
-                        }
-                    }
-                }
-                j++;
-            } while (j < secondary.length && lKey > rKey);
-            previousLKey = lKey;
-            i++;
-        } while (i < primary.length);
-        primary = [];
-        secondary = [];
-    } else if (primary.length + secondary.length > 0) {
-        change = 'Update';
-        if (primary.length >= secondary.length) { primaryVal = String(Object['values'](primary[0])[0]); }
-        if (primary.length <= secondary.length) { secondaryVal = String(Object['values'](secondary)[0]); }
-        if (primary.length === secondary.length && JSON.stringify(primary) === JSON.stringify(secondary)) {
+    const comparisons: Comparison[] = compareObject(primaryObj.constructor.name, primaryObj, secondaryObj, []);
+    return comparisonsToCSV(comparisons, mode);
+
+    /**
+     * Creates all comparison objects after being fed a unique path and primitive values
+     */
+    function comparePrimitive(path: string, primary?: T, secondary?: T, delta?: Comparison[]): Comparison[] {
+        const primaryVal = primary === undefined ? '' : String(primary);
+        const secondaryVal = secondary === undefined ? '' : String(secondary);
+        let change: string;
+        const objVal: string = path.split('|')[0];
+
+        if (primaryVal === secondaryVal) {
             change = 'Match';
+        } else if (primaryVal === '' || secondaryVal === '') {
+            change = 'Add';
+        } else {
+            change = 'Update';
         }
-        delta.push(new Comparison(objVal, obj, primaryVal, secondaryVal, finalVal, change));
+
+        delta.push(new Comparison(objVal, path, primaryVal, secondaryVal, '', change));
+        return delta;
     }
-    return delta;
+
+    /**
+     * Recursively parses two objects by each property and either creates a comparison record, or calls an additional parse
+     * Passing an undefined object means that it is probably missing in one of the files and is added.
+     */
+    function compareObject(path: string, primary?: T, secondary?: T, delta?: Comparison[]): Comparison[] {
+        let newPath: string;
+
+        const p = primary === undefined ? {} : primary;
+        const s = secondary === undefined ? {} : secondary;
+
+        const keys = Object.keys(Object.assign({}, p, s));
+
+        for (const key of keys) {
+            if (p.hasOwnProperty(key) || s.hasOwnProperty(key)) {
+                newPath = path + '|' + key;
+                if (p[key] instanceof Array || s[key] instanceof Array) {
+                    const pArr = p[key] instanceof Array ? p[key] : [p[key]];
+                    const sArr = s[key] instanceof Array ? s[key] : [s[key]];
+                    delta = compareArray(newPath, pArr, sArr, delta);
+                } else if (typeof p[key] === 'object' || typeof p[key] === 'object') {
+                    delta = compareObject(newPath, p[key], s[key], delta);
+                } else {
+                    delta = comparePrimitive(newPath, p[key], s[key], delta);
+                }
+            }
+        }
+        return delta;
+    }
+
+    /**
+     * Recursively parses and compares the objects from two arrays by the unique key specified by getKey
+     * If an the objects match on their keys, they are compared to each other. If it is determined that
+     * an object is unique for the array, it is compared with undefined (net new object)
+     *
+     * A map is used to ensure that only unique keys between the two arrays are processed (no duplicates)
+     */
+    function compareArray(path: string, primary?: T[], secondary?: T[], delta?: Comparison[]): Comparison[] {
+        let keyProp: string;
+        let pKey: string;
+        let sKey: string;
+        let newPath: string = path;
+        let p: T;
+        let s: T;
+
+        primary = primary === undefined ? [] : primary;
+        secondary = secondary === undefined ? [] : secondary;
+
+        const compMap: Map<string, [string, string, T, T]> = new Map();
+        if (primary.length + secondary.length > 0) {
+            let i: number = 0;
+            while (i < primary.length) {
+                let j: number = 0;
+                p = primary[i];
+                while (j < secondary.length) {
+                    s = secondary[j];
+                    if ((Object(p) !== p) || Object(s) !== s ) {
+                        delta = comparePrimitive(path, p, s, delta);
+                    } else if (typeof p === 'object' || typeof s === 'object') {
+
+                        if (primary !== undefined) {
+                            keyProp = p.getKey();
+                            pKey = p.getKeyValue();
+                        } else {
+                            pKey = '~'; // ASCII #126
+                        }
+
+                        if (secondary !== undefined) {
+                            keyProp = s.getKey();
+                            sKey = s.getKeyValue();
+                        } else {
+                            sKey = '~'; // ASCII #126
+                        }
+
+                        newPath = path + '|^' + keyProp + ':';
+                        if (pKey === sKey) {
+                            compMap.set(newPath + pKey + '^', ['object', newPath + pKey + '^', p, s]);
+                        } else if (pKey > sKey) {
+                            compMap.set(newPath + pKey + '^', ['object', newPath + pKey + '^', p, undefined]);
+                        } else if (pKey < sKey) {
+                            compMap.set(newPath + sKey + '^', ['object', newPath + pKey + '^', undefined, s]);
+                        }
+                    }
+                    j++;
+                }
+                i++;
+            }
+
+            compMap.forEach(m => {
+                switch (m[0]) {
+                    case 'array':
+                        delta = compareArray(m[1], [m[2]], [m[3]], delta);
+                        break;
+                    case 'object':
+                        delta = compareObject(m[1], m[2], m[3], delta);
+                        break;
+                    default:
+                        delta = comparePrimitive(m[1], m[2], m[3], delta);
+                        break;
+                }
+            });
+        }
+        return delta;
+    }
 }

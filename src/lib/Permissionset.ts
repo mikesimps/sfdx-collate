@@ -1,7 +1,6 @@
 import { deserialize, deserializeAs, serialize, serializeAs } from 'cerialize';
-import { GetKeys } from './Comparison';
 
-export class ApplicationVisibilities implements GetKeys {
+export class ApplicationVisibilities {
     // Profile and PermissionSet
     @serialize @deserialize public application: string; // key
     @serialize @deserialize public visible: boolean;
@@ -20,7 +19,7 @@ export class ClassAccesses {
     public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-export class CustomPermissions implements GetKeys {
+export class CustomPermissions {
     // Profile and PermissionSet
     @serialize @deserialize public enabled: boolean;
     @serialize @deserialize public name: string;
@@ -29,7 +28,7 @@ export class CustomPermissions implements GetKeys {
     public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-export class ExternalDataSourceAccesses implements GetKeys {
+export class ExternalDataSourceAccesses {
     // Profile and PermissionSet
     @serialize @deserialize public enabled: boolean;
     @serialize @deserialize public externalDataSource: string;
@@ -38,7 +37,7 @@ export class ExternalDataSourceAccesses implements GetKeys {
     public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-export class FieldPermissions implements GetKeys {
+export class FieldPermissions {
     // Profile and PermissionSet
     @serialize @deserialize public editable: boolean;
     @serialize @deserialize public field: string;
@@ -48,7 +47,7 @@ export class FieldPermissions implements GetKeys {
     public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-export class ObjectPermissions implements GetKeys {
+export class ObjectPermissions {
     // Profile and PermissionSet
     @serialize @deserialize public object?: string; // key
     @serialize @deserialize public allowCreate?: boolean;
@@ -62,7 +61,7 @@ export class ObjectPermissions implements GetKeys {
     public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-export class PageAccesses implements GetKeys {
+export class PageAccesses {
     // Profile and PermissionSet
     @serialize @deserialize public apexPage: string;
     @serialize @deserialize public enabled: boolean;
@@ -71,7 +70,7 @@ export class PageAccesses implements GetKeys {
     public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-export class RecordTypeVisibilities implements GetKeys {
+export class RecordTypeVisibilities {
     // Profile and PermissionSet
     @serialize @deserialize public recordType: string;
     @serialize @deserialize public visible: boolean;
@@ -84,7 +83,7 @@ export class RecordTypeVisibilities implements GetKeys {
     public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-export class TabSettings implements GetKeys {
+export class TabSettings {
     // Profile (known as TablVisibilities) and PermissionSet
     @serialize @deserialize public tab: string;
     @serialize @deserialize public visibility: TabVisibility;
@@ -101,7 +100,7 @@ export const tabVisibility = {
 
 type TabVisibility = keyof typeof tabVisibility;
 
-export class UserPermissions implements GetKeys {
+export class UserPermissions {
     // Profile and PermissionSet
     @serialize @deserialize public enabled: boolean;
     @serialize @deserialize public name: string;
@@ -110,7 +109,7 @@ export class UserPermissions implements GetKeys {
     public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
-export class PermissionSet implements GetKeys {
+export class PermissionSet {
     @serializeAs(ApplicationVisibilities) @deserializeAs(ApplicationVisibilities) public applicationVisibilities?: ApplicationVisibilities[] = [];
     @serialize @deserialize public $: string;
     @serializeAs(ClassAccesses) @deserializeAs(ClassAccesses) public classAccesses?: ClassAccesses[] = [];
