@@ -102,12 +102,12 @@ USAGE
   $ sfdx-collate collate:compare:api
 
 OPTIONS
-  -m, --mode=full|inner|exact|diff                What comparison values should be returned
-  -p, --primary=primary                           (required) sfdxAlias.apiName of primary metadata file
-  -s, --secondary=secondary                       (required) sfdxAlias.apiName of secondary metadata file
-  -t, --metadatatype=PermissionSet|Profile        (required) The metadata type to be compared
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
+  -m, --mode=full|inner|exact|diff                       What comparison values should be returned
+  -p, --primary=primary                                  (required) sfdxAlias.apiName of primary metadata file
+  -s, --secondary=secondary                              (required) sfdxAlias.apiName of secondary metadata file
+  -t, --metadatatype=PermissionSet|Profile|SharingRules  (required) The metadata type to be compared
+  --json                                                 format output as json
+  --loglevel=(trace|debug|info|warn|error|fatal)         logging level for this command invocation
 
 EXAMPLE
   $ sfdx collate:compare:api --metadataType PermissionSet --primary uat.All_Users --secondary prod.All_Users --mode full
