@@ -1,10 +1,10 @@
-import { deserialize, deserializeAs, serialize, serializeAs } from 'cerialize';
+import { autoserialize, autoserializeAs } from 'cerialize';
 
 export class ApplicationVisibilities {
     // Profile and PermissionSet
-    @serialize @deserialize public application: string; // key
-    @serialize @deserialize public visible: boolean;
-    @serializeAs('default') @deserializeAs('default') public defaultval: boolean; // profile only
+    @autoserialize public application: string; // key
+    @autoserialize public visible: boolean;
+    @autoserializeAs('default') public defaultval: boolean; // profile only
 
     public getKey(): string { return 'application'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
@@ -12,8 +12,8 @@ export class ApplicationVisibilities {
 
 export class ClassAccesses {
     // Profile and PermissionSet
-    @serialize @deserialize public apexClass: string;
-    @serialize @deserialize public enabled: boolean;
+    @autoserialize public apexClass: string;
+    @autoserialize public enabled: boolean;
 
     public getKey(): string { return 'apexClass'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
@@ -21,8 +21,8 @@ export class ClassAccesses {
 
 export class CustomPermissions {
     // Profile and PermissionSet
-    @serialize @deserialize public enabled: boolean;
-    @serialize @deserialize public name: string;
+    @autoserialize public enabled: boolean;
+    @autoserialize public name: string;
 
     public getKey(): string { return 'name'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
@@ -30,8 +30,8 @@ export class CustomPermissions {
 
 export class ExternalDataSourceAccesses {
     // Profile and PermissionSet
-    @serialize @deserialize public enabled: boolean;
-    @serialize @deserialize public externalDataSource: string;
+    @autoserialize public enabled: boolean;
+    @autoserialize public externalDataSource: string;
 
     public getKey(): string { return 'externalDataSource'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
@@ -39,9 +39,9 @@ export class ExternalDataSourceAccesses {
 
 export class FieldPermissions {
     // Profile and PermissionSet
-    @serialize @deserialize public editable: boolean;
-    @serialize @deserialize public field: string;
-    @serialize @deserialize public readable: boolean;
+    @autoserialize public editable: boolean;
+    @autoserialize public field: string;
+    @autoserialize public readable: boolean;
 
     public getKey(): string { return 'field'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
@@ -49,13 +49,13 @@ export class FieldPermissions {
 
 export class ObjectPermissions {
     // Profile and PermissionSet
-    @serialize @deserialize public object?: string; // key
-    @serialize @deserialize public allowCreate?: boolean;
-    @serialize @deserialize public allowDelete?: boolean;
-    @serialize @deserialize public allowEdit?: boolean;
-    @serialize @deserialize public allowRead?: boolean;
-    @serialize @deserialize public modifyAllRecords?: boolean;
-    @serialize @deserialize public viewAllRecords?: boolean;
+    @autoserialize public object?: string; // key
+    @autoserialize public allowCreate?: boolean;
+    @autoserialize public allowDelete?: boolean;
+    @autoserialize public allowEdit?: boolean;
+    @autoserialize public allowRead?: boolean;
+    @autoserialize public modifyAllRecords?: boolean;
+    @autoserialize public viewAllRecords?: boolean;
 
     public getKey(): string { return 'object'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
@@ -63,8 +63,8 @@ export class ObjectPermissions {
 
 export class PageAccesses {
     // Profile and PermissionSet
-    @serialize @deserialize public apexPage: string;
-    @serialize @deserialize public enabled: boolean;
+    @autoserialize public apexPage: string;
+    @autoserialize public enabled: boolean;
 
     public getKey(): string { return 'apexPage'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
@@ -72,12 +72,12 @@ export class PageAccesses {
 
 export class RecordTypeVisibilities {
     // Profile and PermissionSet
-    @serialize @deserialize public recordType: string;
-    @serialize @deserialize public visible: boolean;
+    @autoserialize public recordType: string;
+    @autoserialize public visible: boolean;
 
     // Profile
-    @serialize @deserialize public defaultval: string;
-    @serialize @deserialize public personAccountDefault: boolean;
+    @autoserialize public defaultval: string;
+    @autoserialize public personAccountDefault: boolean;
 
     public getKey(): string { return 'recordType'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
@@ -85,8 +85,8 @@ export class RecordTypeVisibilities {
 
 export class TabSettings {
     // Profile (known as TablVisibilities) and PermissionSet
-    @serialize @deserialize public tab: string;
-    @serialize @deserialize public visibility: TabVisibility;
+    @autoserialize public tab: string;
+    @autoserializeAs('TabVisibility') public visibility: TabVisibility;
 
     public getKey(): string { return 'tab'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
@@ -102,29 +102,29 @@ type TabVisibility = keyof typeof tabVisibility;
 
 export class UserPermissions {
     // Profile and PermissionSet
-    @serialize @deserialize public enabled: boolean;
-    @serialize @deserialize public name: string;
+    @autoserialize public enabled: boolean;
+    @autoserialize public name: string;
 
     public getKey(): string { return 'name'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
 export class PermissionSet {
-    @serializeAs(ApplicationVisibilities) @deserializeAs(ApplicationVisibilities) public applicationVisibilities?: ApplicationVisibilities[] = [];
-    @serialize @deserialize public $: string;
-    @serializeAs(ClassAccesses) @deserializeAs(ClassAccesses) public classAccesses?: ClassAccesses[] = [];
-    @serializeAs(CustomPermissions) @deserializeAs(CustomPermissions) public customPermissions?: CustomPermissions[] = [];
-    @serialize @deserialize public description?: string;
-    @serializeAs(ExternalDataSourceAccesses) @deserializeAs(ExternalDataSourceAccesses) public externalDataSourceAccesses?: ExternalDataSourceAccesses[] = [];
-    @serializeAs(FieldPermissions, 'fieldPermissions') @deserializeAs(FieldPermissions, 'fieldPermissions') public fieldPermissions?: FieldPermissions[] = [];
-    @serialize @deserialize public hasActivationRequired?: boolean;
-    @serialize @deserialize public label: string;
-    @serialize @deserialize public license?: string;
-    @serializeAs(ObjectPermissions) @deserializeAs(ObjectPermissions) public objectPermissions?: ObjectPermissions[] = [];
-    @serializeAs(PageAccesses) @deserializeAs(PageAccesses) public pageAccesses?: PageAccesses[] = [];
-    @serializeAs(RecordTypeVisibilities) @deserializeAs(RecordTypeVisibilities) public recordTypeVisibilities?: RecordTypeVisibilities[] = [];
-    @serializeAs(TabSettings) @deserializeAs(TabSettings) public tabSettings?: TabSettings[] = [];
-    @serializeAs(UserPermissions) @deserializeAs(UserPermissions) public userPermissions?: UserPermissions[] = [];
+    @autoserializeAs(ApplicationVisibilities) public applicationVisibilities?: ApplicationVisibilities[] = [];
+    @autoserialize public $: string;
+    @autoserializeAs(ClassAccesses) public classAccesses?: ClassAccesses[] = [];
+    @autoserializeAs(CustomPermissions) public customPermissions?: CustomPermissions[] = [];
+    @autoserialize public description?: string;
+    @autoserializeAs(ExternalDataSourceAccesses) public externalDataSourceAccesses?: ExternalDataSourceAccesses[] = [];
+    @autoserializeAs(FieldPermissions, 'fieldPermissions') public fieldPermissions?: FieldPermissions[] = [];
+    @autoserialize public hasActivationRequired?: boolean;
+    @autoserialize public label: string;
+    @autoserialize public license?: string;
+    @autoserializeAs(ObjectPermissions) public objectPermissions?: ObjectPermissions[] = [];
+    @autoserializeAs(PageAccesses) public pageAccesses?: PageAccesses[] = [];
+    @autoserializeAs(RecordTypeVisibilities) public recordTypeVisibilities?: RecordTypeVisibilities[] = [];
+    @autoserializeAs(TabSettings) public tabSettings?: TabSettings[] = [];
+    @autoserializeAs(UserPermissions) public userPermissions?: UserPermissions[] = [];
 
     public getKey(): string { return 'label'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }

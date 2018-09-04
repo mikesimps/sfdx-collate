@@ -1,10 +1,10 @@
-import { deserialize, deserializeAs, serialize, serializeAs } from 'cerialize';
+import { autoserialize, autoserializeAs } from 'cerialize';
 import { ApplicationVisibilities, ClassAccesses, CustomPermissions, ExternalDataSourceAccesses, FieldPermissions, ObjectPermissions, PageAccesses, RecordTypeVisibilities, TabSettings, UserPermissions } from './PermissionSet';
 
 export class CategoryGroupVisibility {
-    @serialize @deserialize public dataCategories: string;
-    @serialize @deserialize public dataCategoryGroup: string;
-    @serialize @deserialize public visibility: categoryGroupVisibility;
+    @autoserialize public dataCategories: string;
+    @autoserialize public dataCategoryGroup: string;
+    @autoserialize public visibility: categoryGroupVisibility;
 
     public getKey(): string { return 'dataCategories'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
@@ -17,8 +17,8 @@ export enum categoryGroupVisibility {
 }
 
 export class LayoutAssignments {
-    @serialize @deserialize public layout: string;
-    @serialize @deserialize public recordType?: string;
+    @autoserialize public layout: string;
+    @autoserialize public recordType?: string;
 
     public getKey(): string { return 'recordType+layout'; }
     public getKeyValue(): string {
@@ -28,29 +28,29 @@ export class LayoutAssignments {
 
 export class LoginHours {
     // Profile
-    @serialize @deserialize public mondayEnd: string;
-    @serialize @deserialize public mondayStart: string;
-    @serialize @deserialize public tuesdayEnd: string;
-    @serialize @deserialize public tuesdayStart: string;
-    @serialize @deserialize public wednesdayEnd: string;
-    @serialize @deserialize public wednesdayStart: string;
-    @serialize @deserialize public thursdayEnd: string;
-    @serialize @deserialize public thursdayStart: string;
-    @serialize @deserialize public fridayEnd: string;
-    @serialize @deserialize public fridayStart: string;
-    @serialize @deserialize public saturdayEnd: string;
-    @serialize @deserialize public saturdayStart: string;
-    @serialize @deserialize public sundayEnd: string;
-    @serialize @deserialize public sundayStart: string;
+    @autoserialize public mondayEnd: string;
+    @autoserialize public mondayStart: string;
+    @autoserialize public tuesdayEnd: string;
+    @autoserialize public tuesdayStart: string;
+    @autoserialize public wednesdayEnd: string;
+    @autoserialize public wednesdayStart: string;
+    @autoserialize public thursdayEnd: string;
+    @autoserialize public thursdayStart: string;
+    @autoserialize public fridayEnd: string;
+    @autoserialize public fridayStart: string;
+    @autoserialize public saturdayEnd: string;
+    @autoserialize public saturdayStart: string;
+    @autoserialize public sundayEnd: string;
+    @autoserialize public sundayStart: string;
 
     public getKey(): string { return 'recordType'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
 }
 
 export class LoginIpRanges {
-    @serialize @deserialize public description: string;
-    @serialize @deserialize public endAddress: string;
-    @serialize @deserialize public startAddress: string;
+    @autoserialize public description: string;
+    @autoserialize public endAddress: string;
+    @autoserialize public startAddress: string;
 
     public getKey(): string { return 'description'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
@@ -58,12 +58,12 @@ export class LoginIpRanges {
 
 export class ProfileActionOverrides {
     // Profile
-    @serialize @deserialize public actionName: string;
-    @serialize @deserialize public content: string;
-    @serialize @deserialize public formfactor: formFactor;
-    @serialize @deserialize public pageOrSobjectType: string;
-    @serialize @deserialize public recordType: string;
-    @serializeAs('type') @deserializeAs('type') public paotype: string;
+    @autoserialize public actionName: string;
+    @autoserialize public content: string;
+    @autoserialize public formfactor: formFactor;
+    @autoserialize public pageOrSobjectType: string;
+    @autoserialize public recordType: string;
+    @autoserialize('string', 'type') public paotype: string;
 
     public getKey(): string { return 'recordType'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }
@@ -77,28 +77,28 @@ export enum formFactor {
 
 export class Profile {
     // Unique to Profile
-    @serialize @deserialize public fullName: string;
-    @serializeAs(CategoryGroupVisibility, 'categoryGroupVisibilities') @deserializeAs(CategoryGroupVisibility, 'categoryGroupVisibilities') public categoryGroupVisibilities?: CategoryGroupVisibility[];
-    @serialize @deserialize public custom?: boolean;
-    @serialize @deserialize public description?: string;
-    @serializeAs(LayoutAssignments, 'layoutAssignments') @deserializeAs(LayoutAssignments, 'layoutAssignments') public layoutAssignments?: LayoutAssignments[];
-    @serializeAs(LoginHours, 'loginHours') @deserializeAs(LoginHours, 'loginHours') public loginHours?: LoginHours[];
-    @serializeAs(LoginIpRanges, 'loginIpRanges') @deserializeAs(LoginIpRanges, 'loginIpRanges') public loginIpRanges?: LoginIpRanges[];
-    @serializeAs(ProfileActionOverrides, 'profileActionOverrides') @deserializeAs(ProfileActionOverrides, 'profileActionOverrides') public profileActionOverrides?: ProfileActionOverrides[];
-    @serialize @deserialize public userLicense?: string;
+    @autoserialize public fullName: string;
+    @autoserializeAs(CategoryGroupVisibility, 'categoryGroupVisibilities') public categoryGroupVisibilities?: CategoryGroupVisibility[];
+    @autoserialize public custom?: boolean;
+    @autoserialize public description?: string;
+    @autoserializeAs(LayoutAssignments, 'layoutAssignments') public layoutAssignments?: LayoutAssignments[];
+    @autoserializeAs(LoginHours, 'loginHours') public loginHours?: LoginHours[];
+    @autoserializeAs(LoginIpRanges, 'loginIpRanges') public loginIpRanges?: LoginIpRanges[];
+    @autoserializeAs(ProfileActionOverrides, 'profileActionOverrides') public profileActionOverrides?: ProfileActionOverrides[];
+    @autoserialize public userLicense?: string;
 
     // Shared with PermissionSet
-    @serialize @deserialize public $: string;
-    @serializeAs(ApplicationVisibilities) @deserializeAs(ApplicationVisibilities) public applicationVisibilities?: ApplicationVisibilities[] = [];
-    @serializeAs(ClassAccesses) @deserializeAs(ClassAccesses) public classAccesses?: ClassAccesses[] = [];
-    @serializeAs(CustomPermissions) @deserializeAs(CustomPermissions) public customPermissions?: CustomPermissions[] = [];
-    @serializeAs(ExternalDataSourceAccesses) @deserializeAs(ExternalDataSourceAccesses) public externalDataSourceAccesses?: ExternalDataSourceAccesses[] = [];
-    @serializeAs(FieldPermissions, 'fieldPermissions') @deserializeAs(FieldPermissions, 'fieldPermissions') public fieldPermissions?: FieldPermissions[] = [];
-    @serializeAs(ObjectPermissions) @deserializeAs(ObjectPermissions) public objectPermissions?: ObjectPermissions[] = [];
-    @serializeAs(PageAccesses) @deserializeAs(PageAccesses) public pageAccesses?: PageAccesses[] = [];
-    @serializeAs(RecordTypeVisibilities) @deserializeAs(RecordTypeVisibilities) public recordTypeVisibilities?: RecordTypeVisibilities[] = [];
-    @serializeAs(UserPermissions) @deserializeAs(UserPermissions) public userPermissions?: UserPermissions[] = [];
-    @serializeAs(TabSettings, 'tabVisibilities') @deserializeAs(TabSettings, 'tabVisibilities') public tabVisibilities: TabSettings[];
+    @autoserialize public $: string;
+    @autoserializeAs(ApplicationVisibilities) public applicationVisibilities?: ApplicationVisibilities[] = [];
+    @autoserializeAs(ClassAccesses) public classAccesses?: ClassAccesses[] = [];
+    @autoserializeAs(CustomPermissions) public customPermissions?: CustomPermissions[] = [];
+    @autoserializeAs(ExternalDataSourceAccesses) public externalDataSourceAccesses?: ExternalDataSourceAccesses[] = [];
+    @autoserializeAs(FieldPermissions, 'fieldPermissions') public fieldPermissions?: FieldPermissions[] = [];
+    @autoserializeAs(ObjectPermissions) public objectPermissions?: ObjectPermissions[] = [];
+    @autoserializeAs(PageAccesses) public pageAccesses?: PageAccesses[] = [];
+    @autoserializeAs(RecordTypeVisibilities) public recordTypeVisibilities?: RecordTypeVisibilities[] = [];
+    @autoserializeAs(UserPermissions) public userPermissions?: UserPermissions[] = [];
+    @autoserializeAs(TabSettings, 'tabVisibilities') public tabVisibilities: TabSettings[];
 
     public getKey(): string { return 'fullName'; }
     public getKeyValue(): string { return String(this[this.getKey()]); }

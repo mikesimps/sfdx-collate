@@ -1,4 +1,4 @@
-import { deserialize, Deserialize, serialize, Serialize } from 'cerialize';
+import { autoserialize, Deserialize, Serialize } from 'cerialize';
 import { toCSV, toObject } from 'csvjson';
 
 export interface GetKeys {
@@ -7,12 +7,12 @@ export interface GetKeys {
 }
 
 export class Comparison {
-    @serialize @deserialize public obj: string;
-    @serialize @deserialize public key: string;
-    @serialize @deserialize public primary: string;
-    @serialize @deserialize public secondary: string;
-    @serialize @deserialize public final: string;
-    @serialize @deserialize public change: string;
+    @autoserialize('string', 'obj') public obj: string;
+    @autoserialize('string', 'key') public key: string;
+    @autoserialize('string', 'primary')  public primary: string;
+    @autoserialize('string', 'secondary')  public secondary: string;
+    @autoserialize('string', 'final')  public final: string;
+    @autoserialize('string', 'change')  public change: string;
 
     constructor(obj: string, key: string, primary: string, secondary: string, final: string, change: string) {
         this.obj = obj;
