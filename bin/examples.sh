@@ -14,3 +14,5 @@ bin/run collate:compare:files  -p test/examples/SharingRules1.sharingRules -s te
 bin/run collate:compare:files  -p test/examples/SharingRules1.sharingRules -s test/examples/SharingRules2.sharingRules -m inner > sharingrule_inner.csv
 
 bin/run collate:compare:build -f sharingrule_default.csv > sharingrule_default_build.xml
+
+bin/run collate:fetch:packagexml -x
