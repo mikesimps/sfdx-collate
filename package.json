@@ -1,6 +1,6 @@
 {
   "name": "sfdx-collate",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "author": "Mike Simpson @mikesimps",
   "bugs": "https://github.com/mikesimps/sfdx-collate/issues",
   "dependencies": {
@@ -8,12 +8,16 @@
     "@oclif/config": "1",
     "@oclif/errors": "1",
     "@salesforce/command": "0.1.6",
+    "@salesforce/ts-types": "^0.5.0",
     "cerialize": "^0.1.18",
     "csvjson": "^5.1.0",
-    "tslib": "1",
-    "xml2js": "^0.4.19",
+    "del": "^3.0.0",
     "flat": "^4.1.0",
-    "snyk": "^1.94.0"
+    "node-stream-zip": "^1.7.0",
+    "snyk": "^1.94.0",
+    "tslib": "1",
+    "xml-js": "^1.6.7",
+    "xml2js": "^0.4.19"
   },
   "devDependencies": {
     "@oclif/dev-cli": "1",
@@ -21,7 +25,11 @@
     "@oclif/test": "^1",
     "@salesforce/dev-config": "1.1.0",
     "@types/chai": "4",
+    "@types/del": "^3.0.1",
+    "@types/flat": "0.0.28",
+    "@types/fs-extra": "^5.0.4",
     "@types/jsforce": "1.8.13",
+    "@types/jsonfile": "^4.0.1",
     "@types/mocha": "5",
     "@types/node": "10",
     "@types/xml2js": "^0.4.3",

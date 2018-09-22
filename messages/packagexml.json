@@ -1,0 +1,6 @@
+{
+    "commandDescription": "Create a package.xml file from a target org",
+    "configFlagDescription": "Configuration file to help make pulling metadata more scriptable",
+    "quickfilterFlagDescription": "CSV list of metadata types to filter",
+    "excludeManagedFlagDescription": "Exclude managed packages (and related items) from output"
+  }

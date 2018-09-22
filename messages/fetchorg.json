@@ -1,0 +1,9 @@
+{
+    "commandDescription": "Download and populate your (dx) project with metadata from another org",
+    "dxFlagDescription": "Indicates if you want the source converted to sfdx format",
+    "targetDirFlagDescription": "The directory the extraced source should be placed in",
+    "excludeManagedFlagDescription": "Exclude managed packages (and related items) from output",
+    "configFlagDescription": "Configuration file to help make pulling metadata more scriptable",
+    "quickfilterFlagDescription": "CSV list of metadata types to filter",
+    "skipCleanupFlagDescription": "Do not cleanup temporary files after completion"
+  }

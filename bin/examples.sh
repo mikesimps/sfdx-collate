@@ -14,3 +14,8 @@ bin/run collate:compare:files  -p test/examples/SharingRules1.sharingRules -s te
 bin/run collate:compare:files  -p test/examples/SharingRules1.sharingRules -s test/examples/SharingRules2.sharingRules -m inner > sharingrule_inner.csv
 
 bin/run collate:compare:build -f sharingrule_default.csv > sharingrule_default_build.xml
+
+bin/run collate:fetch:packagexml -x
+
+# must be run from within a sfdx project
+#<relative path to sfdx-collate source>/bin/run collate:fetch:org -u wc26 -c config/collate.json -t mysrc

@@ -31,7 +31,7 @@ export default class Build extends SfdxCommand {
         const comparisons: Comparison[] = csvToComparisons(compFile).sort(sortByProperty('key'));
 
         let cmpObjRaw = comparisons.reduce((o, key) => ({ ...o, [key.key]: key.final }), {});
-        cmpObjRaw = unflatten(cmpObjRaw, { delimiter: '|', safe: true });
+        cmpObjRaw = unflatten(cmpObjRaw, { delimiter: '|'});
         const instType: string = Object.keys(cmpObjRaw)[0];
         const cmpObjNormalized: object = {};
         normalizeComparisons(cmpObjRaw[instType]);

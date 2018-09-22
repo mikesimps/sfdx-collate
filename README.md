@@ -1,5 +1,6 @@
 # sfdx-collate
-This plugin was written to make it easier for developers (and admins!) to help analyze and clean up their Salesforce org metadata. Initial functionality is focused on permission based metadata which are particularly painful to compare and merge because of their size and complexity. Supported metadata types listed below. Contributions and requests/ideas are welcomed.
+
+This plugin was written to make it easier for developers (and admins!) to help analyze and clean up their Salesforce org metadata. Initial functionality is focused on permission based metadata which are particularly painful to compare and merge because of their size and complexity. This project has also absorbed and enhanced part of the functionality of another project: sfdx-hydrate. This project made it very easy to create a package.xml file without relying on 3rd party hosted tools. Supported metadata types for compare functionality are listed below. Contributions and requests/ideas are welcomed.
 
 |Type| Notes |
 |-:|:-:|
@@ -27,27 +28,37 @@ This plugin was written to make it easier for developers (and admins!) to help a
 
 <!-- installstop -->
 
-### Try it out!
+### Try it out
 
-1. Clone the sample gist:
+Clone the sample gist:
+
 ```
-$ git clone git@gist.github.com:6427ea434581058a14fd3b084b87a5ff.git
+git clone git@gist.github.com:6427ea434581058a14fd3b084b87a5ff.git
 ```
-2. Move into directory: 
+
+Move into directory:
+
 ```
-$ cd 6427ea434581058a14fd3b084b87a5ff/
+cd 6427ea434581058a14fd3b084b87a5ff/
 ```
-3. Make script executable: 
+
+Make script executable:
+
 ```
-$ chmod +x ./sfdx-collate-permissionsets.sh
+chmod +x ./sfdx-collate-permissionsets.sh
 ```
-4. Generate examples:
+
+Generate examples:
+
 ```
-$ ./sfdx-collate-permissionsets.sh` 
+./sfdx-collate-permissionsets.sh
 ```
-**OR** Run a specific example:
-```
-$ sfdx collate:compare:files  -p PermissionSet1.xml -s PermissionSet2.xml > permissionset_default.csv
+
+**OR**
+Run a specific example:
+
+``` bash
+sfdx collate:compare:files  -p PermissionSet1.xml -s PermissionSet2.xml > permissionset_default.csv
 ```
 
 ## Info
@@ -89,14 +100,37 @@ For Standard Profile you must use their API names which are not intuitive.
 
 Full List of Standard Profile API Names: [Here](https://salesforce.stackexchange.com/questions/159005/listing-of-all-standard-profiles-and-their-metadata-api-names)
 
+### Config File
 
+An example config file is defined below. The "quickfilter" array lets you specify a list of metadata types that will be included in the output. You can have the xml output formatted by setting the "formatxml" to true.
+
+Note: commandline parameters will **_override_** what is in the config file
+
+```javascript
+    //config.json
+    {
+        "quickFilters": ["Report",
+            "Dashboard",
+            "ReportType"
+        ],
+        "apiVersion": "40.0",
+        "excludeManaged": "true",
+        "targetDir": ".",
+        "skipcleanup": "false",
+        "dxFormat": "false"
+    }
+
+```
 
 ## Commands
 
 <!-- commands -->
+
 * [`sfdx-collate collate:compare:api`](#sfdx-collate-collatecompareapi)
 * [`sfdx-collate collate:compare:build`](#sfdx-collate-collatecomparebuild)
 * [`sfdx-collate collate:compare:files`](#sfdx-collate-collatecomparefiles)
+* [`sfdx-collate collate:fetch:org`](#sfdx-collate-collatefetchorg)
+* [`sfdx-collate collate:fetch:packagexml`](#sfdx-collate-collatefetchpackagexml)
 
 ## `sfdx-collate collate:compare:api`
 
@@ -121,7 +155,7 @@ EXAMPLE
   ...
 ```
 
-_See code: [src/commands/collate/compare/api.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.3.0/src/commands/collate/compare/api.ts)_
+_See code: [src/commands/collate/compare/api.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.4.0/src/commands/collate/compare/api.ts)_
 
 ## `sfdx-collate collate:compare:build`
 
@@ -140,7 +174,7 @@ EXAMPLE
   $ sfdx collate:compare:build --file directory/comparison.csv
 ```
 
-_See code: [src/commands/collate/compare/build.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.3.0/src/commands/collate/compare/build.ts)_
+_See code: [src/commands/collate/compare/build.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.4.0/src/commands/collate/compare/build.ts)_
 
 ## `sfdx-collate collate:compare:files`
 
@@ -164,5 +198,60 @@ EXAMPLE
   ...
 ```
 
-_See code: [src/commands/collate/compare/files.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.3.0/src/commands/collate/compare/files.ts)_
+_See code: [src/commands/collate/compare/files.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.4.0/src/commands/collate/compare/files.ts)_
+
+## `sfdx-collate collate:fetch:org`
+
+Download and populate your (dx) project with metadata from another org
+
+```
+USAGE
+  $ sfdx-collate collate:fetch:org
+
+OPTIONS
+  -c, --config=config                             Configuration file to help make pulling metadata more scriptable
+  -d, --dxformat                                  Indicates if you want the source converted to sfdx format
+  -q, --quickfilter=quickfilter                   CSV list of metadata types to filter
+  -s, --skipcleanup                               Do not cleanup temporary files after completion
+  -t, --targetdir=targetdir                       The directory the extraced source should be placed in
+  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
+  -x, --excludemanaged                            Exclude managed packages (and related items) from output
+  --apiversion=apiversion                         override the api version used for api requests made by this command
+  --json                                          format output as json
+  --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
+
+EXAMPLE
+  $ sfdx collate:fetch:org -u myOrg@example.com -t ./exportdir -x -d
+       targetdir/applications
+                /classes
+                /customMetadata
+                ...etc
+```
+
+_See code: [src/commands/collate/fetch/org.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.4.0/src/commands/collate/fetch/org.ts)_
+
+## `sfdx-collate collate:fetch:packagexml`
+
+Create a package.xml file from a target org
+
+```
+USAGE
+  $ sfdx-collate collate:fetch:packagexml
+
+OPTIONS
+  -c, --config=config                             Configuration file to help make pulling metadata more scriptable
+  -q, --quickfilter=quickfilter                   CSV list of metadata types to filter
+  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
+  -x, --excludemanaged                            Exclude managed packages (and related items) from output
+  --apiversion=apiversion                         override the api version used for api requests made by this command
+  --json                                          format output as json
+  --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
+
+EXAMPLE
+  $ sfdx collate:fetch:packagexml --targetusername myOrg@example.com
+       <?xml version="1.0" encoding="UTF-8"?>
+       <Package xmlns="http://soap.sforce.com/2006/04/metadata">...</Package>
+```
+
+_See code: [src/commands/collate/fetch/packagexml.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.4.0/src/commands/collate/fetch/packagexml.ts)_
 <!-- commandsstop -->
