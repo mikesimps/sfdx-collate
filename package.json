@@ -1,6 +1,6 @@
 {
   "name": "sfdx-collate",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "author": "Mike Simpson @mikesimps",
   "bugs": "https://github.com/mikesimps/sfdx-collate/issues",
   "dependencies": {
