@@ -4,6 +4,7 @@ import * as del from 'del';
 import * as fs from 'fs-extra';
 import * as StreamZip from 'node-stream-zip';
 import { Packagexml } from '../../../lib/Packagexml';
+import { CollateConfig } from '../../../lib/Utils';
 
 core.Messages.importMessagesDirectory(__dirname);
 const messages = core.Messages.loadMessages('sfdx-collate', 'fetchorg');
@@ -34,18 +35,15 @@ export default class OrgXML extends SfdxCommand {
 
   public async run() {
 
-    const dx: boolean = this.flags.dxformat || false;
-    const targetDir = this.flags.targetdir || '.';
-    const tempDir = './temp_collate_fetch_org';
-    const apiVersion =  this.flags.apiversion || await this.org.retrieveMaxApiVersion();
-    const skipCleanup = this.flags.skipcleanup || false;
+    const configs: CollateConfig = new CollateConfig(this.flags.config, this.flags);
+    const tempDir: string = process.cwd() + '/.tmp_collate_fetch_org';
     const conn = this.org.getConnection();
     try {
       fs.mkdirSync(tempDir);
     } catch ( err ) {
       if ( err.code !== 'EEXIST') { console.log(err); }
     }
-    const packageXML: Packagexml = new Packagexml(conn, this.flags.config, this.flags.quickfilter, this.flags.excludemanaged, apiVersion);
+    const packageXML: Packagexml = new Packagexml(conn, configs);
 
     this.ux.startSpinner('Building package.xml');
     const packagexml = await packageXML.build('xml');
@@ -53,7 +51,7 @@ export default class OrgXML extends SfdxCommand {
     this.ux.stopSpinner('Package.xml built');
 
     let srcFolder = tempDir;
-    const cmdStr = 'sfdx force:mdapi:retrieve -w 10 -k ' + tempDir + '/package.xml -a ' + apiVersion + ' -r ' + tempDir + ' -u ' + this.flags.targetusername;
+    const cmdStr = 'sfdx force:mdapi:retrieve -w 10 -k ' + tempDir + '/package.xml -a ' + configs.apiVersion + ' -r ' + tempDir + ' -u ' + this.flags.targetusername;
     execSync(cmdStr, {stdio: [0, 1, 2]});
 
     this.ux.startSpinner('Unzipping Metadata');
@@ -61,12 +59,13 @@ export default class OrgXML extends SfdxCommand {
         file: tempDir + '/unpackaged.zip',
         storeEntries: true
     });
+
     zip.on('ready', () => {
       zip.extract(null, tempDir, (err, count) => {
           this.ux.log(err ? 'Extract error' : `Extracted ${count} entries`);
           zip.close();
 
-          if ( dx === true ) {
+        if ( configs.dxFormat === true ) {
             srcFolder += '/dxunpackaged';
             this.ux.startSpinner('Converting to sfdx format');
             execSync('sfdx force:mdapi:convert -r ' + tempDir + '/unpackaged -d ' + srcFolder);
@@ -75,16 +74,16 @@ export default class OrgXML extends SfdxCommand {
             srcFolder += '/unpackaged';
           }
 
-          this.ux.startSpinner('Moving files to target directory');
-          fs.move(srcFolder , targetDir, { overwrite: true }, mverr => {
+        this.ux.startSpinner('Moving files to target directory ' + configs.targetDir);
+        fs.move(srcFolder , configs.targetDir, { overwrite: true }, mverr => {
             if ( mverr ) {
               this.ux.log(mverr);
             }
           });
           this.ux.stopSpinner('done');
 
-          if ( !skipCleanup ) {
-            this.ux.startSpinner('Cleaning up temp files');
+        if ( !configs.skipCleanup ) {
+          this.ux.startSpinner('Cleaning up temp files in ' + tempDir);
             del([tempDir]);
             this.ux.stopSpinner('done');
           }

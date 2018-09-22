@@ -1,5 +1,6 @@
 import { core, flags, SfdxCommand } from '@salesforce/command';
 import { Packagexml } from '../../../lib/Packagexml';
+import { CollateConfig } from '../../../lib/Utils';
 
 core.Messages.importMessagesDirectory(__dirname);
 const messages = core.Messages.loadMessages('sfdx-collate', 'packagexml');
@@ -26,9 +27,9 @@ export default class PackageXML extends SfdxCommand {
   protected static requiresProject = false;
 
   public async run() {
-    // const fileType = this.flags.json ? 'json' : 'xml';
     const conn = this.org.getConnection();
-    const packageXML: Packagexml = new Packagexml(conn, this.flags.config, this.flags.quickfilter, this.flags.excludemanaged, this.flags.apiversion || await this.org.retrieveMaxApiVersion());
+    const configs: CollateConfig = new CollateConfig(this.flags.config, this.flags);
+    const packageXML: Packagexml = new Packagexml(conn, configs);
     console.log(await packageXML.build('xml'));
   }
 }

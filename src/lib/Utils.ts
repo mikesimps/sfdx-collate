@@ -1,4 +1,5 @@
-import { Deserialize, Serialize } from 'cerialize';
+import { Deserialize, deserialize, Serialize, serialize } from 'cerialize';
+import * as jf from 'jsonfile';
 import * as xml2js from 'xml2js';
 import { GetKeys } from './Comparison';
 import { PermissionSet } from './Permissionset';
@@ -68,3 +69,35 @@ export const instanceTypes: object = {
     Profile: (Profile),
     SharingRules: (SharingRules)
 };
+
+export class CollateConfig {
+
+    @serialize @deserialize public quickFilters: string[];
+    @serialize @deserialize public excludeManaged: boolean;
+    @serialize @deserialize public apiVersion: string;
+    @serialize @deserialize public targetDir: string;
+    @serialize @deserialize public dxFormat: boolean;
+    @serialize @deserialize public skipCleanup: boolean;
+
+    constructor(fileName: string, flags: object) {
+        let configs: object = {};
+
+        if (fileName !== undefined) {
+            jf.readFile(fileName, (err, obj) => {
+                if (err) {
+                  throw err;
+                } else {
+                    configs = obj; // need to add warnings/exceptions for poorly formatted files
+                }
+            });
+        }
+
+        // flags always take precendence over configs from file
+        this.excludeManaged = flags['excludemanaged'] || configs['excludeManaged'] === true || false;
+        this.apiVersion = flags['apiversion'] || configs['apiVersion'] || '43.0';
+        this.quickFilters = flags['quickfilters'] ? flags['quickfilters'].split(',') : configs['quickFilters'] || [];
+        this.targetDir = flags['targetdir'] || configs['targetDir'] || '.';
+        this.dxFormat = flags['dxformat'] || configs['dxFormat'] === true || false;
+        this.skipCleanup = flags['skipcleanup'] || configs['skipCleanup'] === true || false;
+    }
+}
