@@ -14,9 +14,11 @@ export default class OrgXML extends SfdxCommand {
   public static description = messages.getMessage('commandDescription');
 
   public static examples = [
-    `$ sfdx collate:fetch:org -u myOrg@example.com -d
-    <?xml version="1.0" encoding="UTF-8"?>
-    <Package xmlns="http://soap.sforce.com/2006/04/metadata">...</Package>
+    `$ sfdx collate:fetch:org -u myOrg@example.com -t ./exportdir -x -d
+    targetdir/applications
+             /classes
+             /customMetadata
+             ...etc
   `
   ];
 
@@ -62,31 +64,31 @@ export default class OrgXML extends SfdxCommand {
 
     zip.on('ready', () => {
       zip.extract(null, tempDir, (err, count) => {
-          this.ux.log(err ? 'Extract error' : `Extracted ${count} entries`);
-          zip.close();
+        this.ux.log(err ? 'Extract error' : `Extracted ${count} entries`);
+        zip.close();
 
         if ( configs.dxFormat === true ) {
-            srcFolder += '/dxunpackaged';
-            this.ux.startSpinner('Converting to sfdx format');
-            execSync('sfdx force:mdapi:convert -r ' + tempDir + '/unpackaged -d ' + srcFolder);
-            this.ux.stopSpinner('done');
-          } else {
-            srcFolder += '/unpackaged';
-          }
+          srcFolder += '/dxunpackaged';
+          this.ux.startSpinner('Converting to sfdx format');
+          execSync('sfdx force:mdapi:convert -r ' + tempDir + '/unpackaged -d ' + srcFolder);
+          this.ux.stopSpinner('done');
+        } else {
+          srcFolder += '/unpackaged';
+        }
 
         this.ux.startSpinner('Moving files to target directory ' + configs.targetDir);
         fs.move(srcFolder , configs.targetDir, { overwrite: true }, mverr => {
-            if ( mverr ) {
-              this.ux.log(mverr);
-            }
-          });
-          this.ux.stopSpinner('done');
+          if ( mverr ) {
+            this.ux.log(mverr);
+          }
+        });
+        this.ux.stopSpinner('done');
 
         if ( !configs.skipCleanup ) {
           this.ux.startSpinner('Cleaning up temp files in ' + tempDir);
-            del([tempDir]);
-            this.ux.stopSpinner('done');
-          }
+          del([tempDir]);
+          this.ux.stopSpinner('done');
+        }
       });
     });
   }
