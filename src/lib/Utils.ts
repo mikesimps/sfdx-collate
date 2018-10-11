@@ -95,7 +95,7 @@ export class CollateConfig {
         // flags always take precendence over configs from file
         this.excludeManaged = flags['excludemanaged'] || configs['excludeManaged'] === true || false;
         this.apiVersion = flags['apiversion'] || configs['apiVersion'] || '43.0';
-        this.quickFilters = flags['quickfilters'] ? flags['quickfilters'].split(',') : configs['quickFilters'] || [];
+        this.quickFilters = flags['quickfilter'] ? flags['quickfilter'].split(',') : configs['quickfilter'] || [];
         this.targetDir = flags['targetdir'] || configs['targetDir'] || '.';
         this.dxFormat = flags['dxformat'] || configs['dxFormat'] === true || false;
         this.skipCleanup = flags['skipcleanup'] || configs['skipCleanup'] === true || false;
