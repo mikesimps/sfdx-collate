@@ -210,7 +210,7 @@ export class Packagexml {
               if ((this.configs.quickFilters.length === 0 || this.configs.quickFilters.includes(mdtype))) {
                 packageJson.Package[0].types.push({
                   name: mdtype,
-                  members: packageTypes[mdtype]
+                  members: packageTypes[mdtype].sort()
                 });
               }
             });
