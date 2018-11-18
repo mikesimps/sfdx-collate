@@ -125,11 +125,9 @@ Note: commandline parameters will **_override_** what is in the config file
 ## Commands
 
 <!-- commands -->
-
 * [`sfdx-collate collate:compare:api`](#sfdx-collate-collatecompareapi)
 * [`sfdx-collate collate:compare:build`](#sfdx-collate-collatecomparebuild)
 * [`sfdx-collate collate:compare:files`](#sfdx-collate-collatecomparefiles)
-* [`sfdx-collate collate:fetch:org`](#sfdx-collate-collatefetchorg)
 * [`sfdx-collate collate:fetch:packagexml`](#sfdx-collate-collatefetchpackagexml)
 
 ## `sfdx-collate collate:compare:api`
@@ -155,7 +153,7 @@ EXAMPLE
   ...
 ```
 
-_See code: [src/commands/collate/compare/api.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.4.0/src/commands/collate/compare/api.ts)_
+_See code: [src/commands/collate/compare/api.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.5.0/src/commands/collate/compare/api.ts)_
 
 ## `sfdx-collate collate:compare:build`
 
@@ -174,7 +172,7 @@ EXAMPLE
   $ sfdx collate:compare:build --file directory/comparison.csv
 ```
 
-_See code: [src/commands/collate/compare/build.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.4.0/src/commands/collate/compare/build.ts)_
+_See code: [src/commands/collate/compare/build.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.5.0/src/commands/collate/compare/build.ts)_
 
 ## `sfdx-collate collate:compare:files`
 
@@ -198,37 +196,7 @@ EXAMPLE
   ...
 ```
 
-_See code: [src/commands/collate/compare/files.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.4.0/src/commands/collate/compare/files.ts)_
-
-## `sfdx-collate collate:fetch:org`
-
-Download and populate your (dx) project with metadata from another org
-
-```
-USAGE
-  $ sfdx-collate collate:fetch:org
-
-OPTIONS
-  -c, --config=config                             Configuration file to help make pulling metadata more scriptable
-  -d, --dxformat                                  Indicates if you want the source converted to sfdx format
-  -q, --quickfilter=quickfilter                   CSV list of metadata types to filter
-  -s, --skipcleanup                               Do not cleanup temporary files after completion
-  -t, --targetdir=targetdir                       The directory the extraced source should be placed in
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  -x, --excludemanaged                            Exclude managed packages (and related items) from output
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
-
-EXAMPLE
-  $ sfdx collate:fetch:org -u myOrg@example.com -t ./exportdir -x -d
-       targetdir/applications
-                /classes
-                /customMetadata
-                ...etc
-```
-
-_See code: [src/commands/collate/fetch/org.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.4.0/src/commands/collate/fetch/org.ts)_
+_See code: [src/commands/collate/compare/files.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.5.0/src/commands/collate/compare/files.ts)_
 
 ## `sfdx-collate collate:fetch:packagexml`
 
@@ -253,5 +221,5 @@ EXAMPLE
        <Package xmlns="http://soap.sforce.com/2006/04/metadata">...</Package>
 ```
 
-_See code: [src/commands/collate/fetch/packagexml.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.4.0/src/commands/collate/fetch/packagexml.ts)_
+_See code: [src/commands/collate/fetch/packagexml.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.5.0/src/commands/collate/fetch/packagexml.ts)_
 <!-- commandsstop -->
