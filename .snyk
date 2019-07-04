@@ -1,12 +1,12 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.12.0
+version: v1.13.5
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
   'npm:lodash:20180130':
     - '@salesforce/command > @salesforce/core > lodash':
         reason: nothing else to do
         expires: '2018-09-25T21:49:37.193Z'
-      '@salesforce/command > lodash':
+    - '@salesforce/command > lodash':
         reason: None given
         expires: '2018-09-26T23:12:24.988Z'
   'npm:open:20180512':
@@ -23,3 +23,6 @@ patch:
   'npm:ms:20170412':
     - '@salesforce/command > @salesforce/core > jsonwebtoken > ms':
         patched: '2018-08-27T23:08:16.323Z'
+  SNYK-JS-LODASH-450202:
+    - '@salesforce/command > @salesforce/core > @salesforce/ts-sinon > sinon > nise > @sinonjs/formatio > @sinonjs/samsam > lodash':
+        patched: '2019-07-04T10:16:08.954Z'
