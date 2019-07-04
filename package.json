@@ -7,7 +7,7 @@
     "@oclif/command": "1",
     "@oclif/config": "1",
     "@oclif/errors": "1",
-    "@salesforce/command": "^0.2.5",
+    "@salesforce/command": "^1.0.1",
     "@salesforce/ts-types": "^0.5.0",
     "cerialize": "^0.1.18",
     "csvjson": "^5.1.0",
