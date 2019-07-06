@@ -26,3 +26,33 @@ patch:
   SNYK-JS-LODASH-450202:
     - '@salesforce/command > @salesforce/core > @salesforce/ts-sinon > sinon > nise > @sinonjs/formatio > @sinonjs/samsam > lodash':
         patched: '2019-07-04T10:16:08.954Z'
+    - snyk > inquirer > lodash:
+        patched: '2019-07-06T14:32:08.024Z'
+    - snyk > lodash:
+        patched: '2019-07-06T14:32:08.024Z'
+    - snyk > snyk-nuget-plugin > lodash:
+        patched: '2019-07-06T14:32:08.024Z'
+    - '@salesforce/command > cli-ux > lodash':
+        patched: '2019-07-06T14:32:08.024Z'
+    - snyk > snyk-nodejs-lockfile-parser > lodash:
+        patched: '2019-07-06T14:32:08.024Z'
+    - snyk > snyk-mvn-plugin > lodash:
+        patched: '2019-07-06T14:32:08.024Z'
+    - snyk > snyk-config > lodash:
+        patched: '2019-07-06T14:32:08.024Z'
+    - snyk > @snyk/dep-graph > lodash:
+        patched: '2019-07-06T14:32:08.024Z'
+    - snyk > snyk-nodejs-lockfile-parser > graphlib > lodash:
+        patched: '2019-07-06T14:32:08.024Z'
+    - snyk > snyk-go-plugin > graphlib > lodash:
+        patched: '2019-07-06T14:32:08.024Z'
+    - snyk > @snyk/dep-graph > graphlib > lodash:
+        patched: '2019-07-06T14:32:08.024Z'
+    - '@salesforce/command > @salesforce/core > jsforce > lodash':
+        patched: '2019-07-06T14:32:08.024Z'
+    - snyk > snyk-php-plugin > @snyk/composer-lockfile-parser > lodash:
+        patched: '2019-07-06T14:32:08.024Z'
+    - '@salesforce/command > @oclif/test > fancy-test > lodash':
+        patched: '2019-07-06T14:32:08.024Z'
+    - '@salesforce/command > @salesforce/core > @salesforce/ts-sinon > sinon > nise > @sinonjs/formatio > @sinonjs/samsam > lodash':
+        patched: '2019-07-06T14:32:08.024Z'
