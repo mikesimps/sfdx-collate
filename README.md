@@ -125,26 +125,37 @@ Note: commandline parameters will **_override_** what is in the config file
 ## Commands
 
 <!-- commands -->
-* [`sfdx-collate collate:compare:api`](#sfdx-collate-collatecompareapi)
-* [`sfdx-collate collate:compare:build`](#sfdx-collate-collatecomparebuild)
-* [`sfdx-collate collate:compare:files`](#sfdx-collate-collatecomparefiles)
-* [`sfdx-collate collate:fetch:packagexml`](#sfdx-collate-collatefetchpackagexml)
+* [`sfdx-collate collate:compare:api -t <string> -p <string> -s <string> [-m <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-collate-collatecompareapi--t-string--p-string--s-string--m-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+* [`sfdx-collate collate:compare:build -f <string> [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-collate-collatecomparebuild--f-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+* [`sfdx-collate collate:compare:files -p <string> -s <string> [-m <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-collate-collatecomparefiles--p-string--s-string--m-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+* [`sfdx-collate collate:fetch:packagexml [-c <string>] [-q <string>] [-x] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-collate-collatefetchpackagexml--c-string--q-string--x--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 
-## `sfdx-collate collate:compare:api`
+## `sfdx-collate collate:compare:api -t <string> -p <string> -s <string> [-m <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 Compares two metadatafiles. Currently only PermissionSet files are supported.
 
 ```
 USAGE
-  $ sfdx-collate collate:compare:api
+  $ sfdx-collate collate:compare:api -t <string> -p <string> -s <string> [-m <string>] [--json] [--loglevel 
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -m, --mode=full|inner|exact|diff                       What comparison values should be returned
-  -p, --primary=primary                                  (required) sfdxAlias.apiName of primary metadata file
-  -s, --secondary=secondary                              (required) sfdxAlias.apiName of secondary metadata file
-  -t, --metadatatype=PermissionSet|Profile|SharingRules  (required) The metadata type to be compared
-  --json                                                 format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)         logging level for this command invocation
+  -m, --mode=full|inner|exact|diff                                                  What comparison values should be
+                                                                                    returned
+
+  -p, --primary=primary                                                             (required) sfdxAlias.apiName of
+                                                                                    primary metadata file
+
+  -s, --secondary=secondary                                                         (required) sfdxAlias.apiName of
+                                                                                    secondary metadata file
+
+  -t, --metadatatype=PermissionSet|Profile|SharingRules                             (required) The metadata type to be
+                                                                                    compared
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   $ sfdx collate:compare:api --metadataType PermissionSet --primary uat.All_Users --secondary prod.All_Users --mode full
@@ -153,41 +164,53 @@ EXAMPLE
   ...
 ```
 
-_See code: [src/commands/collate/compare/api.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.5.1/src/commands/collate/compare/api.ts)_
+_See code: [src/commands/collate/compare/api.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.5.2/src/commands/collate/compare/api.ts)_
 
-## `sfdx-collate collate:compare:build`
+## `sfdx-collate collate:compare:build -f <string> [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 Generate metadata file from a csv list of comparisons. The csv can be generated using the collate:compare:files command and expects a specific format.
 
 ```
 USAGE
-  $ sfdx-collate collate:compare:build
+  $ sfdx-collate collate:compare:build -f <string> [--json] [--loglevel 
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -f, --file=file                                 (required) Path to csv comparison file
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
+  -f, --file=file                                                                   (required) Path to csv comparison
+                                                                                    file
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   $ sfdx collate:compare:build --file directory/comparison.csv
 ```
 
-_See code: [src/commands/collate/compare/build.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.5.1/src/commands/collate/compare/build.ts)_
+_See code: [src/commands/collate/compare/build.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.5.2/src/commands/collate/compare/build.ts)_
 
-## `sfdx-collate collate:compare:files`
+## `sfdx-collate collate:compare:files -p <string> -s <string> [-m <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 Compares two metadatafiles. Currently only PermissionSet files are supported.
 
 ```
 USAGE
-  $ sfdx-collate collate:compare:files
+  $ sfdx-collate collate:compare:files -p <string> -s <string> [-m <string>] [--json] [--loglevel 
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -m, --mode=full|inner|exact|diff                What comparison values should be returned
-  -p, --primary=primary                           (required) Path to primary file
-  -s, --secondary=secondary                       (required) Path to secondary file
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
+  -m, --mode=full|inner|exact|diff                                                  What comparison values should be
+                                                                                    returned
+
+  -p, --primary=primary                                                             (required) Path to primary file
+
+  -s, --secondary=secondary                                                         (required) Path to secondary file
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   $ sfdx collate:compare:files --primary directory/file1.xml --secondary directory/file2.xml --mode full
@@ -196,24 +219,36 @@ EXAMPLE
   ...
 ```
 
-_See code: [src/commands/collate/compare/files.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.5.1/src/commands/collate/compare/files.ts)_
+_See code: [src/commands/collate/compare/files.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.5.2/src/commands/collate/compare/files.ts)_
 
-## `sfdx-collate collate:fetch:packagexml`
+## `sfdx-collate collate:fetch:packagexml [-c <string>] [-q <string>] [-x] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 Create a package.xml file from a target org
 
 ```
 USAGE
-  $ sfdx-collate collate:fetch:packagexml
+  $ sfdx-collate collate:fetch:packagexml [-c <string>] [-q <string>] [-x] [-u <string>] [--apiversion <string>] 
+  [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -c, --config=config                             Configuration file to help make pulling metadata more scriptable
-  -q, --quickfilter=quickfilter                   CSV list of metadata types to filter
-  -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
-  -x, --excludemanaged                            Exclude managed packages (and related items) from output
-  --apiversion=apiversion                         override the api version used for api requests made by this command
-  --json                                          format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal)  logging level for this command invocation
+  -c, --config=config                                                               Configuration file to help make
+                                                                                    pulling metadata more scriptable
+
+  -q, --quickfilter=quickfilter                                                     CSV list of metadata types to filter
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  -x, --excludemanaged                                                              Exclude managed packages (and
+                                                                                    related items) from output
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
 
 EXAMPLE
   $ sfdx collate:fetch:packagexml --targetusername myOrg@example.com
@@ -221,5 +256,5 @@ EXAMPLE
        <Package xmlns="http://soap.sforce.com/2006/04/metadata">...</Package>
 ```
 
-_See code: [src/commands/collate/fetch/packagexml.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.5.1/src/commands/collate/fetch/packagexml.ts)_
+_See code: [src/commands/collate/fetch/packagexml.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.5.2/src/commands/collate/fetch/packagexml.ts)_
 <!-- commandsstop -->

@@ -1,34 +1,34 @@
 {
   "name": "sfdx-collate",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "author": "Mike Simpson @mikesimps",
   "bugs": "https://github.com/mikesimps/sfdx-collate/issues",
   "dependencies": {
     "@oclif/command": "1",
     "@oclif/config": "1",
     "@oclif/errors": "1",
-    "@salesforce/command": "^1.0.1",
-    "@salesforce/ts-types": "^0.5.0",
+    "@salesforce/command": "^2.0.0",
+    "@salesforce/ts-types": "^1.1.4",
     "cerialize": "^0.1.18",
     "csvjson": "^5.1.0",
     "del": "^3.0.0",
     "flat": "^4.1.0",
-    "node-stream-zip": "^1.7.0",
+    "node-stream-zip": "^1.8.2",
+    "prepack": "^0.2.54",
     "snyk": "^1.192.3",
     "tslib": "1",
-    "xml-js": "^1.6.7",
+    "xml-js": "^1",
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
     "@oclif/dev-cli": "1",
     "@oclif/plugin-help": "1",
     "@oclif/test": "^1",
-    "@salesforce/dev-config": "1.1.0",
+    "@salesforce/dev-config": "1",
     "@types/chai": "4",
     "@types/del": "^3.0.1",
     "@types/flat": "0.0.28",
     "@types/fs-extra": "^5.0.4",
-    "@types/jsforce": "1.8.13",
     "@types/jsonfile": "^4.0.1",
     "@types/mocha": "5",
     "@types/node": "10",
@@ -39,10 +39,10 @@
     "nyc": "^12",
     "sinon": "5",
     "ts-node": "6",
-    "typescript": "2.9"
+    "typescript": "3"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=9"
   },
   "files": [
     "/lib",
@@ -71,16 +71,17 @@
       "@oclif/plugin-help"
     ]
   },
-  "repository": "mikesimps/sfdx-collate",
+  "repository": "https://github.com/mikesimps/sfdx-collate",
   "scripts": {
     "postpack": "rm -f oclif.manifest.json npm-shrinkwrap.json",
     "posttest": "tsc -p test --noEmit && tslint -p test -t stylish",
-    "prepack": "rm -rf lib && tsc && oclif-dev manifest && oclif-dev readme && npm shrinkwrap",
-    "prepare": "yarn run snyk-protect; rm -rf lib && tsc && oclif-dev manifest && oclif-dev readme && npm shrinkwrap",
+    "prepack": "rm -rf lib && tsc && oclif-dev manifest && oclif-dev readme",
+    "prepare": "yarn run snyk-protect; rm -rf lib && tsc && oclif-dev manifest && oclif-dev readme",
     "test": "snyk test && nyc mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md",
     "snyk-protect": "snyk protect",
-    "prepublish": "npm run snyk-protect"
+    "prepublishOnly": "npm run snyk-protect"
   },
-  "snyk": true
+  "snyk": true,
+  "main": "index.js"
 }
