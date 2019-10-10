@@ -56,3 +56,8 @@ patch:
         patched: '2019-07-06T14:32:08.024Z'
     - '@salesforce/command > @salesforce/core > @salesforce/ts-sinon > sinon > nise > @sinonjs/formatio > @sinonjs/samsam > lodash':
         patched: '2019-07-06T14:32:08.024Z'
+  SNYK-JS-HTTPSPROXYAGENT-469131:
+    - snyk > proxy-agent > https-proxy-agent:
+        patched: '2019-10-10T03:16:19.209Z'
+    - snyk > proxy-agent > pac-proxy-agent > https-proxy-agent:
+        patched: '2019-10-10T03:16:19.209Z'
