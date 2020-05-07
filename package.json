@@ -14,7 +14,7 @@
     "del": "^3.0.0",
     "flat": "^4.1.0",
     "node-stream-zip": "^1.7.0",
-    "snyk": "^1.192.3",
+    "snyk": "^1.319.1",
     "tslib": "1",
     "xml-js": "^1.6.7",
     "xml2js": "^0.4.19"
@@ -76,7 +76,7 @@
     "postpack": "rm -f oclif.manifest.json npm-shrinkwrap.json",
     "posttest": "tsc -p test --noEmit && tslint -p test -t stylish",
     "prepack": "rm -rf lib && tsc && oclif-dev manifest && oclif-dev readme && npm shrinkwrap",
-    "prepare": "yarn run snyk-protect; rm -rf lib && tsc && oclif-dev manifest && oclif-dev readme && npm shrinkwrap",
+    "prepare": "npm run snyk-protect && yarn run snyk-protect; rm -rf lib && tsc && oclif-dev manifest && oclif-dev readme && npm shrinkwrap",
     "test": "snyk test && nyc mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md",
     "snyk-protect": "snyk protect",
