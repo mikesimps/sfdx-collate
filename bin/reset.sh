@@ -1,7 +1,10 @@
 #!/bin/bash
-rm ./npm-shrinkwrap.json
-rm ./yarn.lock
+rm -f ./sharingrule_*.csv
+rm -f ./sharingrule_*.xml
+rm -f ./permissionset_*.csv
+rm -f ./permissionset_*.xml
+rm -f ./npm-shrinkwrap.json
 rm -R ./node_modules
-rm ./oclif.manifest.json
+rm -f ./oclif.manifest.json
 
-npm install
+yarn install
