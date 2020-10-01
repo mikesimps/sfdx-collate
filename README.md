@@ -164,7 +164,7 @@ EXAMPLE
   ...
 ```
 
-_See code: [src/commands/collate/compare/api.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.5.2/src/commands/collate/compare/api.ts)_
+_See code: [src/commands/collate/compare/api.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.5.3/src/commands/collate/compare/api.ts)_
 
 ## `sfdx-collate collate:compare:build -f <string> [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -188,7 +188,7 @@ EXAMPLE
   $ sfdx collate:compare:build --file directory/comparison.csv
 ```
 
-_See code: [src/commands/collate/compare/build.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.5.2/src/commands/collate/compare/build.ts)_
+_See code: [src/commands/collate/compare/build.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.5.3/src/commands/collate/compare/build.ts)_
 
 ## `sfdx-collate collate:compare:files -p <string> -s <string> [-m <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -219,7 +219,7 @@ EXAMPLE
   ...
 ```
 
-_See code: [src/commands/collate/compare/files.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.5.2/src/commands/collate/compare/files.ts)_
+_See code: [src/commands/collate/compare/files.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.5.3/src/commands/collate/compare/files.ts)_
 
 ## `sfdx-collate collate:fetch:packagexml [-c <string>] [-q <string>] [-x] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -256,5 +256,5 @@ EXAMPLE
        <Package xmlns="http://soap.sforce.com/2006/04/metadata">...</Package>
 ```
 
-_See code: [src/commands/collate/fetch/packagexml.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.5.2/src/commands/collate/fetch/packagexml.ts)_
+_See code: [src/commands/collate/fetch/packagexml.ts](https://github.com/mikesimps/sfdx-collate/blob/v0.5.3/src/commands/collate/fetch/packagexml.ts)_
 <!-- commandsstop -->
